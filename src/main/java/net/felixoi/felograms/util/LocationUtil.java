@@ -9,13 +9,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class LocationUtil {
 
-    public static Location<World> transformToBlockMiddle(Location<World> location) {
-        checkNotNull(location, "The location object in LocationUtil#transformToBlockMiddle(Location<World>) cannot be null.");
+    public static Vector3d getBlockMiddle(Vector3i blockPosition) {
+        checkNotNull(blockPosition, "The location object in LocationUtil#getBlockMiddle(Location<World>) cannot be null.");
 
-        Vector3i block = location.getBlockPosition();
-        Vector3d newPosition = Vector3d.from(block.getX() + 0.5F, block.getY(), block.getZ() + 0.5F);
-
-        return location.setPosition(newPosition);
+        return Vector3d.from(blockPosition.getX() + 0.5F, blockPosition.getY(), blockPosition.getZ() + 0.5F);
     }
 
 }

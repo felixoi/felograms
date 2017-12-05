@@ -59,7 +59,7 @@ public class ChatListener {
 
                             this.creationManager.stopCreationProcess(uuid);
                         } else {
-                            Hologram hologram = new SimpleHologram(currentLines, LocationUtil.transformToBlockMiddle(player.getLocation()).add(0, 0.125, 0));
+                            Hologram hologram = new SimpleHologram(currentLines, player.getLocation().setPosition(LocationUtil.getBlockMiddle(player.getLocation().getBlockPosition())));
                             Felograms.getInstance().getHologramManager().spawnHologram(hologram);
 
                             this.creationManager.stopCreationProcess(uuid);
