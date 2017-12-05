@@ -1,4 +1,4 @@
-package net.felixoi.felograms.impl;
+package net.felixoi.felograms.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramManager;
@@ -14,13 +14,15 @@ import org.spongepowered.api.world.extent.Extent;
 
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class SimpleHologramManager implements HologramManager {
 
     private PluginContainer pluginContainer;
     private Map<UUID, List<Entity>> entities;
 
     public SimpleHologramManager(PluginContainer pluginContainer) {
-        Objects.requireNonNull(pluginContainer, "'pluginContainer' in net.felixoi.felograms cannot be null.");
+        checkNotNull(pluginContainer, "The PluginContainer object in SimpleHologramManager#SimpleHologramManager(PluginContainer) cannot be null.");
 
         this.entities = new HashMap<>();
         this.pluginContainer = pluginContainer;
@@ -28,11 +30,13 @@ public class SimpleHologramManager implements HologramManager {
 
     @Override
     public void spawnHologram(Hologram hologram) {
+        checkNotNull(hologram, "The Hologram object in SimpleHologramManager#spawnHologram(Hologram) cannot be null.");
+
         Extent world = hologram.getLocation().getExtent();
 
-        for(int index = 0; index < hologram.getLines().size(); index++) {
+        for (int index = 0; index < hologram.getLines().size(); index++) {
             Text currentLine = hologram.getLines().get(index);
-            Entity armorStand = world.createEntity(EntityTypes.ARMOR_STAND, hologram.getLocation().getPosition().add(0,  hologram.getLines().size() * 0.25 - index * 0.25 - 0.5, 0));
+            Entity armorStand = world.createEntity(EntityTypes.ARMOR_STAND, hologram.getLocation().getPosition().add(0, hologram.getLines().size() * 0.25 - index * 0.25 - 0.5, 0));
 
             // offer data to armor stand
             armorStand.offer(Keys.DISPLAY_NAME, currentLine);
@@ -41,7 +45,7 @@ public class SimpleHologramManager implements HologramManager {
             armorStand.offer(Keys.INVISIBLE, true);
             armorStand.offer(Keys.HAS_GRAVITY, false);
 
-            if(!entities.containsKey(hologram.getUUID())) {
+            if (!entities.containsKey(hologram.getUUID())) {
                 this.entities.put(hologram.getUUID(), new ArrayList<>());
             }
 
@@ -54,7 +58,7 @@ public class SimpleHologramManager implements HologramManager {
 
     @Override
     public void removeHologram(Hologram hologram) {
-
+        checkNotNull(hologram, "The Hologram object in SimpleHologramManager#removeHologram(Hologram) cannot be null.");
     }
 
 }

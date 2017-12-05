@@ -33,6 +33,7 @@ public class CommandRegistry {
                 .permission("felograms.create")
                 .description(Text.of("Create a hologram"))
                 .executor(new CreateCommand())
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
                 .build();
         children.put(Arrays.asList("create", "c", "new"), createCommand);
     }

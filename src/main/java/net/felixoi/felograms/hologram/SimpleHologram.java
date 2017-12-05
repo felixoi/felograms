@@ -1,4 +1,4 @@
-package net.felixoi.felograms.impl;
+package net.felixoi.felograms.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
 import org.spongepowered.api.text.Text;
@@ -6,8 +6,9 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SimpleHologram implements Hologram {
 
@@ -16,8 +17,8 @@ public class SimpleHologram implements Hologram {
     private Location<World> location;
 
     public SimpleHologram(List<Text> lines, Location<World> location) {
-        Objects.requireNonNull(lines, "'lines' in net.felixoi.felograms cannot be null.");
-        Objects.requireNonNull(location, "'location' in net.felixoi.felograms cannot be null.");
+        checkNotNull(lines, "The List<Text> object in SimpleHologram#SimpleHologram(List<Text>, Location<World>) cannot be null.");
+        checkNotNull(location, "The Location<World> object in SimpleHologram#SimpleHologram(List<Text>, Location<World>) cannot be null.");
 
         this.uuid = UUID.randomUUID();
         this.lines = lines;
