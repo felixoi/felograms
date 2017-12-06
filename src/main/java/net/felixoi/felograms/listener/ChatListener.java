@@ -3,6 +3,9 @@ package net.felixoi.felograms.listener;
 import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationManager;
+import net.felixoi.felograms.api.message.Message;
+import net.felixoi.felograms.api.message.MessageType;
+import net.felixoi.felograms.api.message.MessageTypes;
 import net.felixoi.felograms.hologram.SimpleHologram;
 import net.felixoi.felograms.util.LocationUtil;
 import org.spongepowered.api.entity.living.player.Player;
@@ -42,11 +45,11 @@ public class ChatListener {
                     case "<exit": {
                         this.creationManager.stopCreationProcess(uuid);
 
-                        player.sendMessage(Text.of("You left the hologram creation process!"));
+                        Message.builder().messageType(MessageTypes.WARNING).content("You left the hologram creation process!").sendTo(player).build();
                         break;
                     }
                     case "<status": {
-                        player.sendMessage(Text.of("The hologram would contain the following lines:"));
+                        Message.builder().messageType(MessageTypes.NEUTRAL).content("The hologram would contain the following lines:").sendTo(player).build();
                         AtomicInteger index = new AtomicInteger();
                         currentLines.iterator().forEachRemaining(text -> player.sendMessage(Text.of(index.incrementAndGet() + ". ", text)));
                         break;
