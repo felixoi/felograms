@@ -4,7 +4,6 @@ import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationManager;
 import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageType;
 import net.felixoi.felograms.api.message.MessageTypes;
 import net.felixoi.felograms.hologram.SimpleHologram;
 import net.felixoi.felograms.util.LocationUtil;
@@ -49,7 +48,7 @@ public class ChatListener {
                         break;
                     }
                     case "<status": {
-                        Message.builder().messageType(MessageTypes.NEUTRAL).content("The hologram would contain the following lines:").sendTo(player).build();
+                        Message.builder().messageType(MessageTypes.INFO).content("The hologram would contain the following lines:").sendTo(player).build();
                         AtomicInteger index = new AtomicInteger();
                         currentLines.iterator().forEachRemaining(text -> player.sendMessage(Text.of(index.incrementAndGet() + ". ", text)));
                         break;

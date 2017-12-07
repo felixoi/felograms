@@ -8,21 +8,21 @@ public final class MessageTypes {
     private MessageTypes() {
     }
 
-    public static MessageType NEUTRAL = new MessageType() {
+    public static MessageType INFO = new MessageType() {
 
         @Override
         public String getID() {
-            return "NEUTRAL";
+            return "INFO";
         }
 
         @Override
         public String getName() {
-            return "Neutral";
+            return "Info";
         }
 
         @Override
         public TextColor getColor() {
-            return TextColors.DARK_GRAY;
+            return TextColors.AQUA;
         }
 
     };
@@ -98,7 +98,7 @@ public final class MessageTypes {
 
         @Override
         public TextColor getColor() {
-            return TextColors.AQUA;
+            return TextColors.LIGHT_PURPLE;
         }
 
     };
