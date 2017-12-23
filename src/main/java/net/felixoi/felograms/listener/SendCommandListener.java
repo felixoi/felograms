@@ -29,7 +29,9 @@ public class SendCommandListener {
                     new FinishHologramCreationProcessor(),
                     new StatusHologramCreationProcessor(),
                     new IDHologramCreationProcessor(),
-                    new DeleteHologramCreationProcessor());
+                    new DeleteHologramCreationProcessor(),
+                    new InsertHologramCreationProcessor(),
+                    new ModifyHologramCreationProcessor());
 
             Optional<HologramCreationProcessor> processor = activeProcessors.stream().filter(hologramCreationProcessor -> {
                 StringBuilder stringBuilder = new StringBuilder();
