@@ -32,10 +32,10 @@ public class CreateCommand extends Command {
             Message.builder().messageType(MessageTypes.ERROR).localizedLine("hologram.id_exists", hologramID).sendTo(player).build();
         } else {
             if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.already_started").sendTo(player).build();
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.start.already").sendTo(player).build();
             } else {
                 Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramID);
-                Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.started", hologramID).sendTo(player).build();
+                Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.start.success", hologramID).sendTo(player).build();
             }
         }
 

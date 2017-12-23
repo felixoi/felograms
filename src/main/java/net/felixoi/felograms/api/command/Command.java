@@ -90,7 +90,7 @@ public abstract class Command implements CommandExecutor {
             if (Arrays.stream(classes).anyMatch(clazz -> clazz.isAssignableFrom(source.getClass()))) {
                 return this.process(source, args);
             } else {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("command.incorrect_source").sendTo(source).build();
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("command.unaccepted_source").sendTo(source).build();
                 return CommandResult.success();
             }
         } else {

@@ -4,7 +4,6 @@ import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
 import net.felixoi.felograms.api.message.Message;
 import net.felixoi.felograms.api.message.MessageTypes;
-import net.felixoi.felograms.util.TextUtil;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.world.Location;
@@ -33,7 +32,7 @@ public class StatusHologramCreationProcessor implements HologramCreationProcesso
         if (currentBuilder.getLines().isEmpty()) {
             Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.status.empty").sendTo(creator).build();
         } else {
-            Message.Builder builder = Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.status.current");
+            Message.Builder builder = Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.status.show");
 
             AtomicInteger index = new AtomicInteger();
 

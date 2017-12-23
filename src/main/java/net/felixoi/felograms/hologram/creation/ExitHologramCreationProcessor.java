@@ -29,7 +29,7 @@ public class ExitHologramCreationProcessor implements HologramCreationProcessor 
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
         Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
-        Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.exit").sendTo(creator).build();
+        Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.quit.manual").sendTo(creator).build();
 
         return Optional.empty();
     }

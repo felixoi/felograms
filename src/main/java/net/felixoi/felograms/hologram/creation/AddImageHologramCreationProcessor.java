@@ -57,6 +57,7 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
             height = Integer.valueOf(args[1]);
         } catch (NumberFormatException e) {
             Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.height_no_number").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.image.usage").sendTo(creator).build();
 
             return Optional.empty();
         }

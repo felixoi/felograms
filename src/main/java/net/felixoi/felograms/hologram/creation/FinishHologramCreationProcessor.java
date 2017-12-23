@@ -35,8 +35,8 @@ public class FinishHologramCreationProcessor implements HologramCreationProcesso
             return Optional.of(currentBuilder);
         } else {
             if (currentBuilder.getLines().isEmpty()) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.no_lines_added").sendTo(creator).build();
-                Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.auto_quit").sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.create.empty").sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.quit.auto").sendTo(creator).build();
                 Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
 
             } else {
