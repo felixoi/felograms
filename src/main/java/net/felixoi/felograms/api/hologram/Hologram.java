@@ -35,6 +35,8 @@ public interface Hologram extends EntityRepresentable {
 
         Hologram build();
 
+        Hologram buildAndRegister();
+
     }
 
 }

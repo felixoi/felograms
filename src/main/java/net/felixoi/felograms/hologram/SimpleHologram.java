@@ -186,11 +186,15 @@ public class SimpleHologram implements Hologram {
             checkNotNull(this.lines, "The variable 'lines' in Builder#build() cannot be null.");
             checkNotNull(this.location, "The variable 'location' in Builder#build() cannot be null.");
 
-            Hologram hologram = new SimpleHologram(this.id, this.lines, this.location, this.disabled);
+            return new SimpleHologram(this.id, this.lines, this.location, this.disabled);
+        }
 
-            if(this.hologramManager != null) {
-                this.hologramManager.addHologram(hologram);
-            }
+        @Override
+        public Hologram buildAndRegister() {
+            checkNotNull(this.hologramManager, "The variable 'this.hologramManager' in Builder#buildAndRegister() cannot be null.");
+
+            Hologram hologram = this.build();
+            this.hologramManager.addHologram(hologram);
 
             return hologram;
         }
