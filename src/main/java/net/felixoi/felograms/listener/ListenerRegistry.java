@@ -9,6 +9,7 @@ public class ListenerRegistry {
         Sponge.getEventManager().registerListeners(pluginContainer, new ChatListener());
         Sponge.getEventManager().registerListeners(pluginContainer, new SendCommandListener());
         Sponge.getEventManager().registerListeners(pluginContainer, new EntityDamageListener());
+        Sponge.getEventManager().registerListeners(pluginContainer, new HologramEntityListeners());
     }
 
 }

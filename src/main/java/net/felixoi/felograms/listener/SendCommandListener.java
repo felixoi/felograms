@@ -14,7 +14,7 @@ public class SendCommandListener {
     @Listener
     public void onCommand(SendCommandEvent event, @First Player player) {
         UUID uuid = player.getUniqueId();
-        String rawMessage = "/" + event.getCommand() + (event.getArguments().trim().equals("") ? "": " " + event.getArguments());
+        String rawMessage = "/" + event.getCommand() + (event.getArguments().trim().equals("") ? "" : " " + event.getArguments());
 
         if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(uuid)) {
             event.setCancelled(true);

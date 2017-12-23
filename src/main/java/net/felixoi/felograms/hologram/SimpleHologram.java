@@ -1,10 +1,15 @@
 package net.felixoi.felograms.hologram;
 
+import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.data.FelogramsKeys;
+import net.felixoi.felograms.api.data.HologramData;
+import net.felixoi.felograms.api.data.ImmutableHologramData;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramManager;
 import net.felixoi.felograms.util.LocationUtil;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.text.Text;
@@ -72,28 +77,38 @@ public class SimpleHologram implements Hologram {
 
     @Override
     public void spawnAssociatedEntities() {
-        for (int index = 0; index < this.lines.size(); index++) {
-            Text currentLine = this.lines.get(index);
+        Optional<DataManipulatorBuilder<HologramData, ImmutableHologramData>> hologramDataBuilder =
+                Sponge.getDataManager().getManipulatorBuilder(HologramData.class);
 
-            double y = this.lines.size() * SPACE_BETWEEN_LINES - index * SPACE_BETWEEN_LINES - 0.5;
-            Entity armorStand = this.getLocation().getExtent().createEntity(EntityTypes.ARMOR_STAND,
-                    LocationUtil.getBlockMiddle(this.location.getBlockPosition()).add(0, y, 0));
+        if (hologramDataBuilder.isPresent()) {
+            for (int index = 0; index < this.lines.size(); index++) {
+                Text currentLine = this.lines.get(index);
 
-            // offer data to armor stand
-            armorStand.offer(Keys.DISPLAY_NAME, currentLine);
-            armorStand.offer(Keys.CUSTOM_NAME_VISIBLE, true);
-            //armorStand.offer(Keys.ARMOR_STAND_MARKER, true);
-            //armorStand.offer(Keys.INVISIBLE, true);
-            armorStand.offer(Keys.HAS_GRAVITY, false);
+                double y = this.lines.size() * SPACE_BETWEEN_LINES - index * SPACE_BETWEEN_LINES - 0.5;
+                Entity armorStand = this.getLocation().getExtent().createEntity(EntityTypes.ARMOR_STAND,
+                        LocationUtil.getBlockMiddle(this.location.getBlockPosition()).add(0, y, 0));
 
-            // offer custom data to identify hologram entities
-            armorStand.offer(FelogramsKeys.IS_HOLOGRAM, true);
+                // offer data to armor stand
+                armorStand.offer(Keys.DISPLAY_NAME, currentLine);
+                armorStand.offer(Keys.CUSTOM_NAME_VISIBLE, true);
+                armorStand.offer(Keys.ARMOR_STAND_MARKER, true);
+                armorStand.offer(Keys.INVISIBLE, true);
+                armorStand.offer(Keys.HAS_GRAVITY, false);
 
-            this.entities.add(armorStand.getUniqueId());
-            this.location.getExtent().spawnEntity(armorStand);
+                // offer custom data to identify hologram entities
+
+                HologramData hologramData = hologramDataBuilder.get().create();
+                hologramData.set(FelogramsKeys.IS_HOLOGRAM, true);
+                armorStand.offer(hologramData);
+
+                this.entities.add(armorStand.getUniqueId());
+                this.location.getExtent().spawnEntity(armorStand);
+            }
+
+            this.disabled = false; // if all entities are present the hologram is showed and as result the hologram is enabled.
+        } else {
+            Felograms.getInstance().getLogger().error("Failed to retrieve the DataManipulatorBuilder for HologramData!");
         }
-
-        this.disabled = false; // if all entities are present the hologram is showed and as result the hologram is enabled.
     }
 
     @Override
@@ -156,7 +171,8 @@ public class SimpleHologram implements Hologram {
 
         @Override
         public Hologram.Builder setLines(List<Text> lines) {
-            this.lines = checkNotNull(lines, "The variable 'lines' in Builder#lines(lines) cannot be null.");;
+            this.lines = checkNotNull(lines, "The variable 'lines' in Builder#lines(lines) cannot be null.");
+            ;
 
             return this;
         }
@@ -168,7 +184,8 @@ public class SimpleHologram implements Hologram {
 
         @Override
         public Hologram.Builder setLocation(Location<World> location) {
-            this.location = checkNotNull(location, "The variable 'location' in Builder#location(location) cannot be null.");;
+            this.location = checkNotNull(location, "The variable 'location' in Builder#location(location) cannot be null.");
+            ;
 
             return this;
         }

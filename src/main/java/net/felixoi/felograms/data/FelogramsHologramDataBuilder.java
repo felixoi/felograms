@@ -24,7 +24,7 @@ public class FelogramsHologramDataBuilder extends AbstractDataBuilder<HologramDa
 
     @Override
     public Optional<HologramData> createFrom(DataHolder dataHolder) {
-        if(dataHolder.supports(FelogramsKeys.IS_HOLOGRAM)) {
+        if (dataHolder.supports(FelogramsKeys.IS_HOLOGRAM)) {
             return this.create().fill(dataHolder);
         }
 

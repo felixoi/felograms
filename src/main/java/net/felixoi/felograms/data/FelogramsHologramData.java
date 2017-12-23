@@ -43,7 +43,7 @@ public class FelogramsHologramData extends AbstractBooleanData<HologramData, Imm
 
     @Override
     public Optional<HologramData> from(DataContainer container) {
-        if(container.contains(FelogramsKeys.IS_HOLOGRAM)) {
+        if (container.contains(FelogramsKeys.IS_HOLOGRAM)) {
             boolean isHologram = container.getBoolean(FelogramsKeys.IS_HOLOGRAM.getQuery()).get();
             return Optional.of(setValue(isHologram));
         }

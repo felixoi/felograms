@@ -1,7 +1,5 @@
-package net.felixoi.felograms.configuration;
+package net.felixoi.felograms.api.configuration;
 
-import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.configuration.Configuration;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -14,7 +12,7 @@ import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public  class SimpleConfiguration implements Configuration {
+public class SimpleConfiguration implements Configuration {
 
     private final Path path;
     private final ConfigurationLoader<CommentedConfigurationNode> loader;
@@ -33,20 +31,23 @@ public  class SimpleConfiguration implements Configuration {
 
         try {
             this.rootNode = this.loader.load(options);
-        } catch(IOException e) {
+        } catch (IOException e) {
             this.rootNode = this.loader.createEmptyNode(options);
         }
 
         this.save();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private void createFile() {
-        if(!Files.exists(this.path)) {
+        if (!Files.exists(this.path)) {
             try {
                 Files.createDirectories(this.path.getParent());
                 Files.createFile(this.path);
             } catch (IOException e) {
-                Felograms.getInstance().getLogger().error("Couldn't create configuration file '" + this.path.toAbsolutePath().getFileName() + "'!");
                 e.printStackTrace();
             }
         }
@@ -72,13 +73,8 @@ public  class SimpleConfiguration implements Configuration {
         try {
             this.loader.save(this.rootNode);
         } catch (IOException e) {
-            Felograms.getInstance().getLogger().error("Couldn't save configuration in file '" + this.path.toAbsolutePath().getFileName() + "'!");
             e.printStackTrace();
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements Configuration.Builder {

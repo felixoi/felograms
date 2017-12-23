@@ -10,7 +10,8 @@ public class FelogramsKeys {
 
     public static final Key<Value<Boolean>> IS_HOLOGRAM = KeyFactory.makeSingleKey(
             TypeToken.of(Boolean.class),
-            new TypeToken<Value<Boolean>>() {},
+            new TypeToken<Value<Boolean>>() {
+            },
             DataQuery.of("Hologram"), "felograms:is_hologram", "Hologram");
 
 }

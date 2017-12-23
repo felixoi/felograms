@@ -5,12 +5,14 @@ import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
 import net.felixoi.felograms.api.message.Message;
 import net.felixoi.felograms.api.message.MessageTypes;
 import net.felixoi.felograms.util.TextUtil;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class StatusHologramCreationProcessor implements HologramCreationProcessor {
 

@@ -38,7 +38,8 @@ public class FileConfigurationHologramStore implements HologramStore {
         List<Hologram> list = Lists.newArrayList(holograms);
 
         try {
-            this.configuration.getRoot().getNode("holograms").setValue(new TypeToken<List<Hologram>>(){}, list);
+            this.configuration.getRoot().getNode("holograms").setValue(new TypeToken<List<Hologram>>() {
+            }, list);
         } catch (ObjectMappingException e) {
             Felograms.getInstance().getLogger().error("Failed to save holograms to file configuration!");
             e.printStackTrace();
