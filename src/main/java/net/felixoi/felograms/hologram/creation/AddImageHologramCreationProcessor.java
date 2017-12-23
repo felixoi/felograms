@@ -5,7 +5,7 @@ import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
 import net.felixoi.felograms.api.message.Message;
 import net.felixoi.felograms.api.message.MessageTypes;
-import net.felixoi.felograms.util.ImageToTextUtil;
+import net.felixoi.felograms.api.text.TextImage;
 import net.felixoi.felograms.util.TextUtil;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
@@ -65,13 +65,13 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
 
         Path file = Felograms.getInstance().getPicturesDirectory().resolve(filename);
         if (!Files.exists(file)) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.no_file").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.no_file", filename).sendTo(creator).build();
             return Optional.empty();
         }
 
         try {
             BufferedImage image = ImageIO.read(file.toFile());
-            Text[] lines = ImageToTextUtil.createTextFromImage(image, height);
+            Text[] lines = TextImage.of(image, height).toText();
 
             for (Text line : lines) {
                 currentBuilder.line(line);

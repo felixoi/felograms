@@ -1,6 +1,7 @@
 package net.felixoi.felograms;
 
 import com.google.inject.Inject;
+import net.felixoi.felograms.api.command.Command;
 import net.felixoi.felograms.api.configuration.SimpleConfiguration;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
@@ -94,7 +95,8 @@ public class Felograms {
         this.hologramManager = new SimpleHologramManager(this.hologramStore);
         this.hologramCreationManager = new SimpleHologramCreationManager();
 
-        Sponge.getCommandManager().register(this.pluginContainer, new FelogramsCommand().getCommandSpec(), "felograms");
+        Command command = new FelogramsCommand();
+        Sponge.getCommandManager().register(this.pluginContainer, command.getCommandSpec(), command.getAliases());
 
         this.logger.info("Started successfully!");
     }
