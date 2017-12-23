@@ -27,7 +27,7 @@ public class RemoveCommand extends Command {
         Hologram hologram = args.<Hologram>getOne("hologramID").get();
 
         Felograms.getInstance().getHologramManager().removeHologram(hologram.getID());
-        Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("hologram.removed", hologram.getID()).sendTo(source).build();
+        Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("hologram.removed", hologram.getID()).sendTo(source).build();
 
         return CommandResult.success();
     }

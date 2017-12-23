@@ -26,10 +26,10 @@ public class DisableCommand extends Command {
         Hologram hologram = args.<Hologram>getOne("hologramID").get();
 
         if (hologram.isDisabled()) {
-            Message.builder().messageType(MessageTypes.WARNING).localizedContent("hologram.disabled.already", hologram.getID()).sendTo(source).build();
+            Message.builder().messageType(MessageTypes.WARNING).localizedLine("hologram.disabled.already", hologram.getID()).sendTo(source).build();
         } else {
             hologram.removeAssociatedEntities();
-            Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("hologram.disabled.success", hologram.getID()).sendTo(source).build();
+            Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("hologram.disabled.success", hologram.getID()).sendTo(source).build();
         }
 
         return CommandResult.success();

@@ -39,7 +39,7 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
         String[] args = arguments.split(" ");
 
         if (args.length != 2) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.usage").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.usage").sendTo(creator).build();
 
             return Optional.empty();
         }
@@ -48,7 +48,7 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
         int height;
 
         if (!filename.matches("(.*).(png|jpg|jpeg)")) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.invalid_file").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.invalid_file").sendTo(creator).build();
 
             return Optional.empty();
         }
@@ -56,14 +56,14 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
         try {
             height = Integer.valueOf(args[1]);
         } catch (NumberFormatException e) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.height_no_number").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.height_no_number").sendTo(creator).build();
 
             return Optional.empty();
         }
 
         Path file = Felograms.getInstance().getPicturesDirectory().resolve(filename);
         if (!Files.exists(file)) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.no_file", filename).sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.no_file", filename).sendTo(creator).build();
             return Optional.empty();
         }
 
@@ -75,11 +75,11 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
                 currentBuilder.line(line);
             }
 
-            Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.image.added").hoverContentText(TextUtil.listToText(lines)).sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.image.added").sendTo(creator).build(); //todo
 
             return Optional.of(currentBuilder);
         } catch (IOException e) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.failed_to_convert").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.image.failed_to_convert").sendTo(creator).build();
 
             return Optional.empty();
         }

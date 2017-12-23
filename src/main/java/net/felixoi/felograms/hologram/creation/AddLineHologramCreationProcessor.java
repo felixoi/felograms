@@ -32,7 +32,10 @@ public class AddLineHologramCreationProcessor implements HologramCreationProcess
         Text line = TextSerializers.FORMATTING_CODE.deserialize(arguments);
         currentBuilder.line(line);
 
-        Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.line_added", TextSerializers.FORMATTING_CODE.serialize(line)).hoverContentText(line).sendTo(creator).build();
+        Message.builder().messageType(MessageTypes.SUCCESS)
+                .localizedLine("creation.line_added", TextSerializers.FORMATTING_CODE.serialize(line))
+                .line(line)
+                .sendTo(creator).build();
 
         return Optional.of(currentBuilder);
     }

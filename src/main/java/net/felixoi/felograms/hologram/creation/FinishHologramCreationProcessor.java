@@ -29,20 +29,20 @@ public class FinishHologramCreationProcessor implements HologramCreationProcesso
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
         if(Felograms.getInstance().getHologramManager().getHologramIDs().contains(currentBuilder.getID().get())) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.id.exists").sendTo(creator).build();
-            Message.builder().messageType(MessageTypes.INFO).localizedContent("creation.id.usage").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.id.exists").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.id.usage").sendTo(creator).build();
 
             return Optional.of(currentBuilder);
         } else {
             if (currentBuilder.getLines().isEmpty()) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.no_lines_added").sendTo(creator).build();
-                Message.builder().messageType(MessageTypes.WARNING).localizedContent("creation.auto_quit").sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.no_lines_added").sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.auto_quit").sendTo(creator).build();
                 Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
 
             } else {
                 Hologram hologram = currentBuilder.setDisabled(false).setLocation(location).buildAndRegister();
                 Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
-                Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("hologram.created", hologram.getID()).sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("hologram.created", hologram.getID()).sendTo(creator).build();
             }
         }
 

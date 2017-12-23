@@ -34,17 +34,17 @@ public class IDHologramCreationProcessor implements HologramCreationProcessor {
             String hologramID = args[0];
 
             if (Felograms.getInstance().getHologramManager().getHologramIDs().contains(hologramID)) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedContent("hologram.id_exists", hologramID).sendTo(creator).build();
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("hologram.id_exists", hologramID).sendTo(creator).build();
             } else {
                 if(currentBuilder.getID().get().equalsIgnoreCase(hologramID)) {
-                    Message.builder().messageType(MessageTypes.WARNING).localizedContent("creation.id.already", hologramID).sendTo(creator).build();
+                    Message.builder().messageType(MessageTypes.WARNING).localizedLine("creation.id.already", hologramID).sendTo(creator).build();
                 } else {
                     currentBuilder.setID(hologramID);
-                    Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.id.changed", hologramID).sendTo(creator).build();
+                    Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.id.changed", hologramID).sendTo(creator).build();
                 }
             }
         } else {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.id.usage").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.id.usage").sendTo(creator).build();
         }
 
         return Optional.of(currentBuilder);

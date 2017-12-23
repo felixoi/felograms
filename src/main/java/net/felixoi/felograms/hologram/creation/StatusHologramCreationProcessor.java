@@ -29,9 +29,9 @@ public class StatusHologramCreationProcessor implements HologramCreationProcesso
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
         if (currentBuilder.getLines().isEmpty()) {
-            Message.builder().messageType(MessageTypes.INFO).localizedContent("creation.status.empty").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.status.empty").sendTo(creator).build();
         } else {
-            Message.builder().messageType(MessageTypes.INFO).localizedContent("creation.status.current").hoverContentText(TextUtil.listToText(currentBuilder.getLines())).sendTo(creator).build().toText();
+            Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.status.current").sendTo(creator).build().toText();
         }
 
         return Optional.of(currentBuilder);
