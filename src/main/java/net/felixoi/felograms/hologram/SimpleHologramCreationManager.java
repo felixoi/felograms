@@ -1,55 +1,70 @@
 package net.felixoi.felograms.hologram;
 
+import net.felixoi.felograms.Felograms;
+import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationManager;
-import org.spongepowered.api.text.Text;
+import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
+import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class SimpleHologramCreationManager implements HologramCreationManager {
 
-    private Map<UUID, String> creators;
-    private Map<String, List<Text>> creations;
+    private Map<UUID, Hologram.Builder> creations;
 
     public SimpleHologramCreationManager() {
-        this.creators = new HashMap<>();
         this.creations = new HashMap<>();
     }
 
     @Override
+    public Map<UUID, Hologram.Builder> getCreations() {
+        return this.creations;
+    }
+
+    @Override
     public Set<UUID> getCreators() {
-        return this.creators.keySet();
-    }
-
-
-    @Override
-    public Collection<String> getCreationIDs() {
-        return this.creators.values();
+        return this.creations.keySet();
     }
 
     @Override
-    public Optional<String> getCreationID(UUID uuid) {
-        return Optional.ofNullable(this.creators.get(uuid));
+    public Optional<Hologram.Builder> getCreation(UUID uuid) {
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#getCreation(uuid) cannot be null.");
+
+        return Optional.ofNullable(this.creations.get(uuid));
     }
 
     @Override
-    public Optional<List<Text>> getLines(String creationID) {
-        return Optional.ofNullable(this.creations.get(creationID));
+    public void startCreation(UUID uuid, String hologramID) {
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#startCreation(uuid) cannot be null.");
+        checkNotNull(hologramID, "The variable 'hologramID' in SimpleHologramCreationManager#startCreation(uuid, hologramID) cannot be null.");
+
+        this.creations.put(uuid, SimpleHologram.builder().setManager(Felograms.getInstance().getHologramManager()).setID(hologramID));
     }
 
     @Override
-    public void setLines(String creationID, List<Text> lines) {
-        this.creations.put(creationID, lines);
+    public void stopCreation(UUID uuid) {
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#stopCreation(uuid) cannot be null.");
+
+        this.creations.remove(uuid);
     }
 
     @Override
-    public void startCreationProcess(UUID uuid, String id) {
-        this.creators.put(uuid, id);
-        this.creations.put(id, new ArrayList<>());
-    }
+    public void process(HologramCreationProcessor processor, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
+        checkNotNull(processor, "The variable 'processor' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
+        checkNotNull(creator, "The variable 'cr' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
+        checkNotNull(arguments, "The variable 'arguments' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
+        checkNotNull(location, "The variable 'location' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
 
-    @Override
-    public void stopCreationProcess(UUID uuid) {
-        this.creators.remove(uuid);
+        if (this.getCreation(uuid).isPresent()) {
+            Optional<Hologram.Builder> builder = processor.process(this.getCreation(uuid).get(), uuid, creator, arguments, location);
+
+            builder.ifPresent(creation -> this.creations.put(uuid, creation));
+        }
     }
 
 }

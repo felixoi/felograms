@@ -5,9 +5,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 public final class MessageTypes {
 
-    private MessageTypes() {
-    }
-
     public static MessageType INFO = new MessageType() {
 
         @Override
@@ -26,7 +23,6 @@ public final class MessageTypes {
         }
 
     };
-
     public static MessageType SUCCESS = new MessageType() {
 
         @Override
@@ -45,7 +41,6 @@ public final class MessageTypes {
         }
 
     };
-
     public static MessageType WARNING = new MessageType() {
 
         @Override
@@ -64,7 +59,6 @@ public final class MessageTypes {
         }
 
     };
-
     public static MessageType ERROR = new MessageType() {
 
         @Override
@@ -83,7 +77,6 @@ public final class MessageTypes {
         }
 
     };
-
     public static MessageType DEBUG = new MessageType() {
 
         @Override
@@ -102,5 +95,8 @@ public final class MessageTypes {
         }
 
     };
+
+    private MessageTypes() {
+    }
 
 }

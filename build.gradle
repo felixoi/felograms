@@ -1,14 +1,16 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
+    id 'java'
 }
-
-apply plugin: 'java'
 
 group = pluginGroup
 version = pluginVersion
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 dependencies {
-    compile 'org.spongepowered:spongeapi:6.0.0'
+    compileOnly 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
 }
 
 sponge.plugin.id = pluginId

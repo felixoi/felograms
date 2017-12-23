@@ -2,63 +2,67 @@ package net.felixoi.felograms.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramManager;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.entity.spawn.SpawnCause;
-import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.extent.Extent;
+import net.felixoi.felograms.api.hologram.HologramStore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SimpleHologramManager implements HologramManager {
 
-    private PluginContainer pluginContainer;
-    private Map<UUID, List<Entity>> entities;
+    private HologramStore hologramStore;
+    private Map<String, Hologram> holograms;
 
-    public SimpleHologramManager(PluginContainer pluginContainer) {
-        checkNotNull(pluginContainer, "The PluginContainer object in SimpleHologramManager#SimpleHologramManager(PluginContainer) cannot be null.");
+    public SimpleHologramManager(HologramStore hologramStore) {
+        this.hologramStore = checkNotNull(hologramStore, "The variable 'holograms' in SimpleHologramManager#SimpleHologramManager(holograms) cannot be null.");
 
-        this.entities = new HashMap<>();
-        this.pluginContainer = pluginContainer;
+        this.holograms = new HashMap<>();
+
+        hologramStore.loadHolograms().forEach(hologram -> {
+            this.holograms.put(hologram.getID(), hologram);
+        });
     }
 
     @Override
-    public void spawnHologram(Hologram hologram) {
-        checkNotNull(hologram, "The Hologram object in SimpleHologramManager#spawnHologram(Hologram) cannot be null.");
+    public Collection<Hologram> getHolograms() {
+        return this.holograms.values();
+    }
 
-        Extent world = hologram.getLocation().getExtent();
+    @Override
+    public Collection<Hologram> getEnabledHolograms() {
+        return this.getHolograms().stream().filter(Hologram::isDisabled).collect(Collectors.toList());
+    }
 
-        for (int index = 0; index < hologram.getLines().size(); index++) {
-            Text currentLine = hologram.getLines().get(index);
-            Entity armorStand = world.createEntity(EntityTypes.ARMOR_STAND, hologram.getLocation().getPosition().add(0, hologram.getLines().size() * 0.25 - index * 0.25 - 0.5, 0));
+    @Override
+    public void addHologram(Hologram hologram) {
+        checkNotNull(hologram, "The variable 'hologram' in SimpleHologramManager#addHologram(hologram) cannot be null.");
 
-            // offer data to armor stand
-            armorStand.offer(Keys.DISPLAY_NAME, currentLine);
-            armorStand.offer(Keys.CUSTOM_NAME_VISIBLE, true);
-            armorStand.offer(Keys.ARMOR_STAND_MARKER, true);
-            armorStand.offer(Keys.INVISIBLE, true);
-            armorStand.offer(Keys.HAS_GRAVITY, false);
+        this.holograms.put(hologram.getID(), hologram);
+        this.hologramStore.saveHolograms(this.holograms.values());
+    }
 
-            if (!entities.containsKey(hologram.getUUID())) {
-                this.entities.put(hologram.getUUID(), new ArrayList<>());
-            }
+    @Override
+    public Optional<Hologram> getHologram(String hologramID) {
+        if (this.isExistent(hologramID)) {
+            return Optional.of(this.holograms.get(hologramID));
+        } else {
+            return Optional.empty();
+        }
+    }
 
-            this.entities.get(hologram.getUUID()).add(armorStand);
+    @Override
+    public void removeHologram(String hologramID) {
+        if(this.getHologram(hologramID).isPresent()) {
+            this.getHologram(hologramID).get().removeAssociatedEntities();
         }
 
-        SpawnCause spawnCause = SpawnCause.builder().type(SpawnTypes.PLUGIN).build();
-        world.spawnEntities(this.entities.get(hologram.getUUID()), Cause.source(spawnCause).owner(this.pluginContainer).build());
+        this.holograms.remove(hologramID);
+        this.hologramStore.saveHolograms(this.holograms.values());
     }
 
     @Override
-    public void removeHologram(Hologram hologram) {
-        checkNotNull(hologram, "The Hologram object in SimpleHologramManager#removeHologram(Hologram) cannot be null.");
+    public boolean isExistent(String hologramID) {
+        return this.holograms.containsKey(hologramID);
     }
-
 }

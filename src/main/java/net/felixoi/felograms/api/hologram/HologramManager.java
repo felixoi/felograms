@@ -1,9 +1,20 @@
 package net.felixoi.felograms.api.hologram;
 
+import java.util.Collection;
+import java.util.Optional;
+
 public interface HologramManager {
 
-    void spawnHologram(Hologram hologram);
+    Collection<Hologram> getHolograms();
 
-    void removeHologram(Hologram hologram);
+    Collection<Hologram> getEnabledHolograms();
+
+    void addHologram(Hologram hologram);
+
+    Optional<Hologram> getHologram(String hologramID);
+
+    void removeHologram(String hologramID);
+
+    boolean isExistent(String hologramID);
 
 }

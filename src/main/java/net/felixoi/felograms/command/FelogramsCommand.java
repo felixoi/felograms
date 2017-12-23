@@ -1,15 +1,22 @@
 package net.felixoi.felograms.command;
 
-import org.spongepowered.api.command.CommandException;
+import net.felixoi.felograms.api.command.Aliases;
+import net.felixoi.felograms.api.command.Children;
+import net.felixoi.felograms.api.command.Command;
+import net.felixoi.felograms.api.command.Permission;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.text.Text;
 
-public class FelogramsCommand implements CommandExecutor {
+@Aliases({"felograms", "felogram", "felo", "holograms", "hologram", "holo"})
+@Permission("felograms.info")
+@Children({CreateCommand.class, DisableCommand.class, EnableCommand.class, RemoveCommand.class})
+public class FelogramsCommand extends Command {
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult process(CommandSource source, CommandContext args) {
+        source.sendMessage(Text.of("test"));
         return CommandResult.success();
     }
 

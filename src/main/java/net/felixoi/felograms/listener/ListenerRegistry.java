@@ -7,6 +7,8 @@ public class ListenerRegistry {
 
     public static void registerListeners(PluginContainer pluginContainer) {
         Sponge.getEventManager().registerListeners(pluginContainer, new ChatListener());
+        Sponge.getEventManager().registerListeners(pluginContainer, new SendCommandListener());
+        Sponge.getEventManager().registerListeners(pluginContainer, new EntityDamageListener());
     }
 
 }
