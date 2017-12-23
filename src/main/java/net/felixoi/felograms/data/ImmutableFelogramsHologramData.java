@@ -19,7 +19,12 @@ public class ImmutableFelogramsHologramData extends AbstractImmutableSingleData<
     }
 
     @Override
-    protected ImmutableValue<?> getValueGetter() {
+    public ImmutableValue<Boolean> isHologram() {
+        return this.getValueGetter();
+    }
+
+    @Override
+    protected ImmutableValue<Boolean> getValueGetter() {
         return Sponge.getRegistry().getValueFactory()
                 .createValue(FelogramsKeys.IS_HOLOGRAM, getValue(), false).asImmutable();
     }
