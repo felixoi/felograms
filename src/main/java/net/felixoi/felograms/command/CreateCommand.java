@@ -28,11 +28,15 @@ public class CreateCommand extends Command {
         Player player = (Player) source;
         String hologramID = args.<String>getOne("hologramID").get();
 
-        if (!Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {
-            Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramID);
-            Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.started", hologramID).sendTo(player).build();
+        if(Felograms.getInstance().getHologramManager().getHologramIDs().contains(hologramID)) {
+            Message.builder().messageType(MessageTypes.ERROR).localizedContent("hologram.id_exists", hologramID).sendTo(player).build();
         } else {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.already_started").sendTo(player).build();
+            if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {
+                Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.already_started").sendTo(player).build();
+            } else {
+                Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramID);
+                Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.started", hologramID).sendTo(player).build();
+            }
         }
 
         return CommandResult.success();

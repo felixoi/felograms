@@ -6,6 +6,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Hologram extends EntityRepresentable {
 
@@ -22,6 +23,8 @@ public interface Hologram extends EntityRepresentable {
         Builder setManager(HologramManager hologramManager);
 
         Builder setID(String id);
+
+        Optional<String> getID();
 
         Builder line(Text line);
 

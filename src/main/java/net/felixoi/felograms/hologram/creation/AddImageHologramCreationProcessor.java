@@ -36,12 +36,10 @@ public class AddImageHologramCreationProcessor implements HologramCreationProces
 
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
-        // format: <(img|image) <filename> <height>
-
         String[] args = arguments.split(" ");
 
         if (args.length != 2) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image_usage").sendTo(creator).build();
+            Message.builder().messageType(MessageTypes.ERROR).localizedContent("creation.image.usage").sendTo(creator).build();
 
             return Optional.empty();
         }

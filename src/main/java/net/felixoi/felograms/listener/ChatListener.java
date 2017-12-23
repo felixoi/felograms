@@ -29,7 +29,8 @@ public class ChatListener {
                     new AddImageHologramCreationProcessor(),
                     new ExitHologramCreationProcessor(),
                     new FinishHologramCreationProcessor(),
-                    new StatusHologramCreationProcessor());
+                    new StatusHologramCreationProcessor(),
+                    new IDHologramCreationProcessor());
 
             Optional<HologramCreationProcessor> processor = activeProcessors.stream().filter(hologramCreationProcessor -> {
                 StringBuilder stringBuilder = new StringBuilder();

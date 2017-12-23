@@ -4,10 +4,7 @@ import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramManager;
 import net.felixoi.felograms.api.hologram.HologramStore;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,6 +27,11 @@ public class SimpleHologramManager implements HologramManager {
     @Override
     public Collection<Hologram> getHolograms() {
         return this.holograms.values();
+    }
+
+    @Override
+    public Set<String> getHologramIDs() {
+        return this.holograms.keySet();
     }
 
     @Override

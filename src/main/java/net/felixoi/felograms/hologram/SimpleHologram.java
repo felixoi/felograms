@@ -161,6 +161,11 @@ public class SimpleHologram implements Hologram {
         }
 
         @Override
+        public Optional<String> getID() {
+            return Optional.ofNullable(this.id);
+        }
+
+        @Override
         public Hologram.Builder line(Text line) {
             checkNotNull(line, "The variable 'line' in Builder#line(line) cannot be null.");
 
