@@ -23,7 +23,7 @@ public class ExitHologramCreationProcessor implements HologramCreationProcessor 
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("exit", "cancel");
+        return Arrays.asList("exit", "cancel", "quit");
     }
 
     @Override
