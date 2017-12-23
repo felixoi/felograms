@@ -66,13 +66,4 @@ public class FelogramsHologramData extends AbstractBooleanData<HologramData, Imm
         return 0;
     }
 
-    @Override
-    public DataContainer toContainer() {
-        DataContainer container = super.toContainer();
-
-        container.set(FelogramsKeys.IS_HOLOGRAM.getQuery(), this.getValue());
-
-        return container;
-    }
-
 }
