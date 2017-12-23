@@ -22,33 +22,9 @@ public class ChatListener {
         String rawMessage = event.getRawMessage().toPlain();
 
         if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(uuid)) {
-            event.setChannel(MessageChannel.TO_NONE);
+            event.setCancelled(true);
 
-            List<HologramCreationProcessor> activeProcessors = Arrays.asList(
-                    new AddLineHologramCreationProcessor(),
-                    new AddImageHologramCreationProcessor(),
-                    new ExitHologramCreationProcessor(),
-                    new FinishHologramCreationProcessor(),
-                    new StatusHologramCreationProcessor(),
-                    new IDHologramCreationProcessor());
-
-            Optional<HologramCreationProcessor> processor = activeProcessors.stream().filter(hologramCreationProcessor -> {
-                StringBuilder stringBuilder = new StringBuilder();
-
-                for (String alias : hologramCreationProcessor.getAliases()) {
-                    stringBuilder.append(alias).append("|");
-                }
-
-                String aliasRegEx = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
-
-                return rawMessage.matches("(?i:^<(" + aliasRegEx + ")( (.*))?)");
-            }).findFirst();
-
-            if (processor.isPresent()) {
-                Felograms.getInstance().getHologramCreationManager().process(processor.get(), uuid, player, rawMessage.substring(rawMessage.indexOf(" ") + 1), player.getLocation());
-            } else {
-                Felograms.getInstance().getHologramCreationManager().process(new AddLineHologramCreationProcessor(), uuid, player, rawMessage, player.getLocation());
-            }
+            Felograms.getInstance().getHologramCreationManager().process(new AddLineHologramCreationProcessor(), uuid, player, rawMessage, player.getLocation());
         }
     }
 
