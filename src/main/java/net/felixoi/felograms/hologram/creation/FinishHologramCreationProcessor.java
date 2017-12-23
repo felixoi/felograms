@@ -34,7 +34,7 @@ public class FinishHologramCreationProcessor implements HologramCreationProcesso
             Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
 
         } else {
-            Hologram hologram = currentBuilder.setDisabled(false).setLocation(location).build();
+            Hologram hologram = currentBuilder.setDisabled(false).setLocation(location).buildAndRegister();
             Felograms.getInstance().getHologramCreationManager().stopCreation(uuid);
             Message.builder().messageType(MessageTypes.SUCCESS).localizedContent("creation.finished", hologram.getID()).sendTo(creator).build();
         }

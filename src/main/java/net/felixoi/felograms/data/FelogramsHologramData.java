@@ -6,20 +6,20 @@ import net.felixoi.felograms.api.data.ImmutableHologramData;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataHolder;
-import org.spongepowered.api.data.manipulator.mutable.common.AbstractSingleData;
+import org.spongepowered.api.data.manipulator.mutable.common.AbstractBooleanData;
 import org.spongepowered.api.data.merge.MergeFunction;
 import org.spongepowered.api.data.value.mutable.Value;
 
 import java.util.Optional;
 
-public class FelogramsHologramData extends AbstractSingleData<Boolean, HologramData, ImmutableHologramData> implements HologramData {
+public class FelogramsHologramData extends AbstractBooleanData<HologramData, ImmutableHologramData> implements HologramData {
 
     FelogramsHologramData() {
         this(false);
     }
 
     FelogramsHologramData(boolean value) {
-        super(value, FelogramsKeys.IS_HOLOGRAM);
+        super(value, FelogramsKeys.IS_HOLOGRAM, false);
     }
 
     @Override
