@@ -1,5 +1,6 @@
 package net.felixoi.felograms.hologram.creation;
 
+import net.felixoi.felograms.api.command.Aliases;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
 import net.felixoi.felograms.api.message.Message;
@@ -15,17 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class AddLineHologramCreationProcessor implements HologramCreationProcessor {
-
-    @Override
-    public String getID() {
-        return "ADD_LINE";
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("add", "addLine");
-    }
+@Aliases({"add", "addline"})
+public class AddLineHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {

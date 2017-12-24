@@ -4,6 +4,7 @@ import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationManager;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -15,9 +16,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SimpleHologramCreationManager implements HologramCreationManager {
 
     private Map<UUID, Hologram.Builder> creations;
+    private List<HologramCreationProcessor> processors;
 
     public SimpleHologramCreationManager() {
         this.creations = new HashMap<>();
+        this.processors = new ArrayList<>();
     }
 
     @Override
@@ -53,15 +56,25 @@ public class SimpleHologramCreationManager implements HologramCreationManager {
     }
 
     @Override
-    public void process(HologramCreationProcessor processor, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
-        checkNotNull(processor, "The variable 'processor' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
-        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
-        checkNotNull(creator, "The variable 'cr' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
-        checkNotNull(arguments, "The variable 'arguments' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
-        checkNotNull(location, "The variable 'location' in SimpleHologramCreationManager#process(processor, uuid, creator, arguments, location) cannot be null.");
+    public void registerProcessor(HologramCreationProcessor processor) {
+        this.processors.add(checkNotNull(processor, "The variable 'processor' in SimpleHologramCreationManager#registerProcessor(processor) cannot be null."));
+    }
+
+    @Override
+    public List<HologramCreationProcessor> getProcessors() {
+        return this.processors;
+    }
+
+    @Override
+    public void process(HologramCreationProcessor processor, UUID uuid, Player player, String arguments, Location<World> location) {
+        checkNotNull(processor, "The variable 'processor' in SimpleHologramCreationManager#process(processor, uuid, player, arguments, location) cannot be null.");
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#process(processor, uuid, player, arguments, location) cannot be null.");
+        checkNotNull(player, "The variable 'player' in SimpleHologramCreationManager#process(processor, uuid, player, arguments, location) cannot be null.");
+        checkNotNull(arguments, "The variable 'arguments' in SimpleHologramCreationManager#process(processor, uuid, player, arguments, location) cannot be null.");
+        checkNotNull(location, "The variable 'location' in SimpleHologramCreationManager#process(processor, uuid, player, arguments, location) cannot be null.");
 
         if (this.getCreation(uuid).isPresent()) {
-            Optional<Hologram.Builder> builder = processor.process(this.getCreation(uuid).get(), uuid, creator, arguments, location);
+            Optional<Hologram.Builder> builder = processor.processInput(this.getCreation(uuid).get(), uuid, player, arguments, location);
 
             builder.ifPresent(creation -> this.creations.put(uuid, creation));
         }

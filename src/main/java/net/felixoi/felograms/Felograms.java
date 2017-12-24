@@ -12,6 +12,7 @@ import net.felixoi.felograms.command.FelogramsCommand;
 import net.felixoi.felograms.data.FelogramsHologramDataBuilder;
 import net.felixoi.felograms.hologram.SimpleHologramCreationManager;
 import net.felixoi.felograms.hologram.SimpleHologramManager;
+import net.felixoi.felograms.hologram.creation.HologramCreationProcessorRegistry;
 import net.felixoi.felograms.hologram.store.FileConfigurationHologramStore;
 import net.felixoi.felograms.listener.ListenerRegistry;
 import net.felixoi.felograms.util.ConfigurationUtil;
@@ -93,7 +94,9 @@ public class Felograms {
                 .build());
 
         this.hologramManager = new SimpleHologramManager(this.hologramStore);
+
         this.hologramCreationManager = new SimpleHologramCreationManager();
+        HologramCreationProcessorRegistry.registerProcessors(this.hologramCreationManager);
 
         Command command = new FelogramsCommand();
         Sponge.getCommandManager().register(this.pluginContainer, command.getCommandSpec(), command.getAliases());

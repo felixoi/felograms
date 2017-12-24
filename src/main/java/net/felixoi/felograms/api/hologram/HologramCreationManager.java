@@ -1,13 +1,10 @@
 package net.felixoi.felograms.api.hologram;
 
-import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface HologramCreationManager {
 
@@ -21,6 +18,10 @@ public interface HologramCreationManager {
 
     void stopCreation(UUID uuid);
 
-    void process(HologramCreationProcessor processor, UUID uuid, MessageReceiver creator, String arguments, Location<World> location);
+    void registerProcessor(HologramCreationProcessor processor);
+
+    List<HologramCreationProcessor> getProcessors();
+
+    void process(HologramCreationProcessor processor, UUID uuid, Player player, String arguments, Location<World> location);
 
 }

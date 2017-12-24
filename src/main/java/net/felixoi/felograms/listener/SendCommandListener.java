@@ -2,6 +2,8 @@ package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.api.message.Message;
+import net.felixoi.felograms.api.message.MessageTypes;
 import net.felixoi.felograms.hologram.creation.*;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -22,18 +24,9 @@ public class SendCommandListener {
         if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(uuid)) {
             event.setCancelled(true);
 
-            List<HologramCreationProcessor> activeProcessors = Arrays.asList(
-                    new AddLineHologramCreationProcessor(),
-                    new AddImageHologramCreationProcessor(),
-                    new ExitHologramCreationProcessor(),
-                    new FinishHologramCreationProcessor(),
-                    new StatusHologramCreationProcessor(),
-                    new IDHologramCreationProcessor(),
-                    new DeleteHologramCreationProcessor(),
-                    new InsertHologramCreationProcessor(),
-                    new ModifyHologramCreationProcessor());
+            Optional<HologramCreationProcessor> processor =
+                    Felograms.getInstance().getHologramCreationManager().getProcessors().stream().filter(hologramCreationProcessor -> {
 
-            Optional<HologramCreationProcessor> processor = activeProcessors.stream().filter(hologramCreationProcessor -> {
                 StringBuilder stringBuilder = new StringBuilder();
 
                 for (String alias : hologramCreationProcessor.getAliases()) {
@@ -48,7 +41,7 @@ public class SendCommandListener {
             if (processor.isPresent()) {
                 Felograms.getInstance().getHologramCreationManager().process(processor.get(), uuid, player, event.getArguments(), player.getLocation());
             } else {
-
+                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.command.not_found").sendTo(player).build();
             }
         }
     }

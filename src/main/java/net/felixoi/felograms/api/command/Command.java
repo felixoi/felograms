@@ -26,7 +26,7 @@ public abstract class Command implements CommandExecutor {
     private final String[] aliases;
 
     public Command(CommandElement... commandElements) {
-        checkState(getClass().isAnnotationPresent(Aliases.class), "Alias annotation for commandSpec class" + getClass().getName() + "is not present.");
+        checkState(getClass().isAnnotationPresent(Aliases.class), "Aliases annotation for command class " + getClass().getName() + " is not present.");
 
         this.aliases = getClass().getAnnotation(Aliases.class).value();
         this.permission = getClass().isAnnotationPresent(Permission.class) ? getClass().getAnnotation(Permission.class).value() : null;

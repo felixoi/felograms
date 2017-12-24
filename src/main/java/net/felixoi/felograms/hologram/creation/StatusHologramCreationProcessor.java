@@ -1,5 +1,6 @@
 package net.felixoi.felograms.hologram.creation;
 
+import net.felixoi.felograms.api.command.Aliases;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
 import net.felixoi.felograms.api.message.Message;
@@ -15,17 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StatusHologramCreationProcessor implements HologramCreationProcessor {
-
-    @Override
-    public String getID() {
-        return "STATUS";
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("status", "current");
-    }
+@Aliases({"status", "current"})
+public class StatusHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
