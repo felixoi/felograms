@@ -1,11 +1,10 @@
 package net.felixoi.felograms.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.hologram.HologramManager;
-import net.felixoi.felograms.api.hologram.HologramStore;
+import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.HologramStore;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,11 +31,6 @@ public class SimpleHologramManager implements HologramManager {
     @Override
     public Set<String> getHologramIDs() {
         return this.holograms.keySet();
-    }
-
-    @Override
-    public Collection<Hologram> getEnabledHolograms() {
-        return this.getHolograms().stream().filter(Hologram::isDisabled).collect(Collectors.toList());
     }
 
     @Override

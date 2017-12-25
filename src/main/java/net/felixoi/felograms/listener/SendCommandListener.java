@@ -1,17 +1,14 @@
 package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
-import net.felixoi.felograms.hologram.creation.*;
+import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.message.Message;
+import net.felixoi.felograms.internal.message.MessageTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.command.SendCommandEvent;
 import org.spongepowered.api.event.filter.cause.First;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,9 +36,9 @@ public class SendCommandListener {
             }).findFirst();
 
             if (processor.isPresent()) {
-                Felograms.getInstance().getHologramCreationManager().process(processor.get(), uuid, player, event.getArguments(), player.getLocation());
+                Felograms.getInstance().getHologramCreationManager().process(processor.get(), player, event.getArguments());
             } else {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.command.not_found").sendTo(player).build();
+                Message.ofLocalized(MessageTypes.ERROR, "creation.command.not_found").sendTo(player);
             }
         }
     }

@@ -3,9 +3,9 @@ package net.felixoi.felograms.hologram.store;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.configuration.Configuration;
+import net.felixoi.felograms.internal.configuration.Configuration;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.hologram.HologramStore;
+import net.felixoi.felograms.internal.hologram.HologramStore;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 import java.util.Collection;

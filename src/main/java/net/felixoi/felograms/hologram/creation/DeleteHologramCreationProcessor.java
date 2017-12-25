@@ -1,45 +1,47 @@
 package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.api.command.Aliases;
+import net.felixoi.felograms.internal.command.Aliases;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
+import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.message.Message;
+import net.felixoi.felograms.internal.message.MessageTypes;
+import net.felixoi.felograms.internal.message.MultiMessage;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.channel.MessageReceiver;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Aliases({"delete", "del", "remove", "rm"})
 public class DeleteHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
+    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
         String[] args = arguments.split(" ");
 
         if(args.length == 1) {
             try {
                 int lineNumber = Integer.valueOf(args[0]);
 
-                List<Text> lines = currentBuilder.getLines();
+                List<Text> lines = builder.getLines();
                 lines.remove(lineNumber - 1);
 
-                currentBuilder.setLines(lines);
-                Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.delete.success").sendTo(creator).build();
+                builder.setLines(lines);
+                Message.ofLocalized(MessageTypes.SUCCESS, "creation.delete.success");
+
+                return Optional.of(builder);
             } catch (NumberFormatException e) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.delete.not_number").sendTo(creator).build();
-                Message.builder().messageType(MessageTypes.INFO).localizedLine("creation.delete.usage").sendTo(creator).build();
+                MultiMessage.builder()
+                        .localizedMessage(MessageTypes.ERROR, "command.arguments.expected_integer", args[0])
+                        .localizedMessage(MessageTypes.INFO, "creation.delete.usage")
+                        .sendTo(player)
+                        .buildAndSend();
             }
         } else {
-            Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.delete.usage").sendTo(creator).build();
+            Message.ofLocalized(MessageTypes.ERROR, "creation.delete.usage").sendTo(player);
         }
 
-        return Optional.of(currentBuilder);
+        return Optional.empty();
     }
 
 }

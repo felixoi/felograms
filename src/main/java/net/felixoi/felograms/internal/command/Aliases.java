@@ -1,6 +1,4 @@
-package net.felixoi.felograms.api.command;
-
-import org.spongepowered.api.command.CommandSource;
+package net.felixoi.felograms.internal.command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AcceptedSources {
+public @interface Aliases {
 
-    Class<? extends CommandSource>[] value();
+    String[] value();
 
 }

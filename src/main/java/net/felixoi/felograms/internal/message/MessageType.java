@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.message;
+package net.felixoi.felograms.internal.message;
 
 import org.spongepowered.api.text.format.TextColor;
 

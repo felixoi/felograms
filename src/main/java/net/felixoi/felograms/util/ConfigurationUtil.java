@@ -2,7 +2,7 @@ package net.felixoi.felograms.util;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.google.common.reflect.TypeToken;
-import net.felixoi.felograms.api.configuration.serializer.*;
+import net.felixoi.felograms.internal.configuration.serializer.*;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.hologram.SimpleHologram;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollection;

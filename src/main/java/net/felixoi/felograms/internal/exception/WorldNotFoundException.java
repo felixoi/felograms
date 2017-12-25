@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.exception;
+package net.felixoi.felograms.internal.exception;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

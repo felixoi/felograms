@@ -1,9 +1,9 @@
 package net.felixoi.felograms.command;
 
-import net.felixoi.felograms.api.command.Aliases;
-import net.felixoi.felograms.api.command.Children;
-import net.felixoi.felograms.api.command.Command;
-import net.felixoi.felograms.api.command.Permission;
+import net.felixoi.felograms.internal.command.Aliases;
+import net.felixoi.felograms.internal.command.Children;
+import net.felixoi.felograms.internal.command.Command;
+import net.felixoi.felograms.internal.command.Permission;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;

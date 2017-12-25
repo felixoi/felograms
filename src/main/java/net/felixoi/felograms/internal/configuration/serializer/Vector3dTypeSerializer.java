@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.configuration.serializer;
+package net.felixoi.felograms.internal.configuration.serializer;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.google.common.reflect.TypeToken;

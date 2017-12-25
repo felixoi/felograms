@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.configuration;
+package net.felixoi.felograms.internal.configuration;
 
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;

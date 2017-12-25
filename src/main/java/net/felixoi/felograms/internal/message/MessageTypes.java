@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.message;
+package net.felixoi.felograms.internal.message;
 
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
@@ -23,6 +23,7 @@ public final class MessageTypes {
         }
 
     };
+
     public static MessageType SUCCESS = new MessageType() {
 
         @Override
@@ -41,6 +42,7 @@ public final class MessageTypes {
         }
 
     };
+
     public static MessageType WARNING = new MessageType() {
 
         @Override
@@ -59,6 +61,7 @@ public final class MessageTypes {
         }
 
     };
+
     public static MessageType ERROR = new MessageType() {
 
         @Override
@@ -77,6 +80,64 @@ public final class MessageTypes {
         }
 
     };
+
+    public static MessageType CONSEQUENCE = new MessageType() {
+
+        @Override
+        public String getID() {
+            return "CONSEQUENCE";
+        }
+
+        @Override
+        public String getName() {
+            return "Consequence";
+        }
+
+        @Override
+        public TextColor getColor() {
+            return TextColors.GRAY;
+        }
+
+    };
+
+    public static MessageType MIXED = new MessageType() {
+
+        @Override
+        public String getID() {
+            return "MIXED";
+        }
+
+        @Override
+        public String getName() {
+            return "Mixed";
+        }
+
+        @Override
+        public TextColor getColor() {
+            return TextColors.RESET;
+        }
+
+    };
+
+    public static MessageType NONE = new MessageType() {
+
+        @Override
+        public String getID() {
+            return "NONE";
+        }
+
+        @Override
+        public String getName() {
+            return "None";
+        }
+
+        @Override
+        public TextColor getColor() {
+            return TextColors.NONE;
+        }
+
+    };
+
     public static MessageType DEBUG = new MessageType() {
 
         @Override

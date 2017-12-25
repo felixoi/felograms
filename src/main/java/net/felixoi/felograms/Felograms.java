@@ -1,15 +1,17 @@
 package net.felixoi.felograms;
 
 import com.google.inject.Inject;
-import net.felixoi.felograms.api.command.Command;
-import net.felixoi.felograms.api.configuration.SimpleConfiguration;
+import net.felixoi.felograms.internal.command.Command;
+import net.felixoi.felograms.internal.configuration.SimpleConfiguration;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
-import net.felixoi.felograms.api.hologram.HologramCreationManager;
-import net.felixoi.felograms.api.hologram.HologramManager;
-import net.felixoi.felograms.api.hologram.HologramStore;
+import net.felixoi.felograms.internal.hologram.HologramCreationManager;
+import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.HologramStore;
 import net.felixoi.felograms.command.FelogramsCommand;
+import net.felixoi.felograms.data.FelogramsHologramData;
 import net.felixoi.felograms.data.FelogramsHologramDataBuilder;
+import net.felixoi.felograms.data.ImmutableFelogramsHologramData;
 import net.felixoi.felograms.hologram.SimpleHologramCreationManager;
 import net.felixoi.felograms.hologram.SimpleHologramManager;
 import net.felixoi.felograms.hologram.creation.HologramCreationProcessorRegistry;
@@ -23,9 +25,7 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
-import org.spongepowered.api.event.game.state.GameAboutToStartServerEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -73,6 +73,8 @@ public class Felograms {
         DataRegistration.builder()
                 .dataClass(HologramData.class)
                 .immutableClass(ImmutableHologramData.class)
+                .dataImplementation(FelogramsHologramData.class)
+                .immutableImplementation(ImmutableFelogramsHologramData.class)
                 .builder(new FelogramsHologramDataBuilder())
                 .manipulatorId("felogram-data")
                 .dataName("Felograms Data")

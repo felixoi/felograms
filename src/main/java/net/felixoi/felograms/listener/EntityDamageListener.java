@@ -1,7 +1,6 @@
 package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.data.FelogramsKeys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.event.Listener;

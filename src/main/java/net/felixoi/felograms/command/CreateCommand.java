@@ -1,12 +1,12 @@
 package net.felixoi.felograms.command;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.command.AcceptedSources;
-import net.felixoi.felograms.api.command.Aliases;
-import net.felixoi.felograms.api.command.Command;
-import net.felixoi.felograms.api.command.Permission;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
+import net.felixoi.felograms.internal.command.AcceptedSources;
+import net.felixoi.felograms.internal.command.Aliases;
+import net.felixoi.felograms.internal.command.Command;
+import net.felixoi.felograms.internal.command.Permission;
+import net.felixoi.felograms.internal.message.Message;
+import net.felixoi.felograms.internal.message.MessageTypes;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -29,13 +29,13 @@ public class CreateCommand extends Command {
         String hologramID = args.<String>getOne("hologramID").get();
 
         if(Felograms.getInstance().getHologramManager().getHologramIDs().contains(hologramID)) {
-            Message.builder().messageType(MessageTypes.ERROR).localizedLine("hologram.id_exists", hologramID).sendTo(player).build();
+            Message.ofLocalized(MessageTypes.ERROR, "hologram.id_exists", hologramID).sendTo(player);
         } else {
             if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("creation.start.already").sendTo(player).build();
+                Message.ofLocalized(MessageTypes.ERROR, "creation.start.already").sendTo(player);
             } else {
                 Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramID);
-                Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("creation.start.success", hologramID).sendTo(player).build();
+                Message.ofLocalized(MessageTypes.SUCCESS, "creation.start.success", hologramID).sendTo(player);
             }
         }
 

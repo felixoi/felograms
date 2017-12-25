@@ -1,5 +1,6 @@
 package net.felixoi.felograms.api.hologram;
 
+import net.felixoi.felograms.internal.hologram.HologramManager;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.ResettableBuilder;
 import org.spongepowered.api.world.Location;

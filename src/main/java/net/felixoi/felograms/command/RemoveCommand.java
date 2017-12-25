@@ -1,12 +1,12 @@
 package net.felixoi.felograms.command;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.command.Aliases;
-import net.felixoi.felograms.api.command.Command;
-import net.felixoi.felograms.api.command.Permission;
+import net.felixoi.felograms.internal.command.Aliases;
+import net.felixoi.felograms.internal.command.Command;
+import net.felixoi.felograms.internal.command.Permission;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
+import net.felixoi.felograms.internal.message.Message;
+import net.felixoi.felograms.internal.message.MessageTypes;
 import net.felixoi.felograms.command.element.HologramCommandElement;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -27,7 +27,7 @@ public class RemoveCommand extends Command {
         Hologram hologram = args.<Hologram>getOne("hologramID").get();
 
         Felograms.getInstance().getHologramManager().removeHologram(hologram.getID());
-        Message.builder().messageType(MessageTypes.SUCCESS).localizedLine("hologram.removed", hologram.getID()).sendTo(source).build();
+        Message.ofLocalized(MessageTypes.SUCCESS, "hologram.removed", hologram.getID()).sendTo(source);
 
         return CommandResult.success();
     }

@@ -1,6 +1,5 @@
 package net.felixoi.felograms.api.text;
 
-import net.felixoi.felograms.util.TextUtil;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextElement;
 import org.spongepowered.api.text.format.TextColor;

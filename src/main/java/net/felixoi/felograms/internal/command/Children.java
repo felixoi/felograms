@@ -1,4 +1,4 @@
-package net.felixoi.felograms.api.command;
+package net.felixoi.felograms.internal.command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Permission {
+public @interface Children {
 
-    String value();
+    Class<? extends Command>[] value();
 
 }

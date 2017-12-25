@@ -1,6 +1,6 @@
 package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.api.hologram.HologramCreationManager;
+import net.felixoi.felograms.internal.hologram.HologramCreationManager;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

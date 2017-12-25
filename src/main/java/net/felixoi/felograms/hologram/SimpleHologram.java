@@ -5,7 +5,7 @@ import net.felixoi.felograms.api.data.FelogramsKeys;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.HologramManager;
 import net.felixoi.felograms.util.LocationUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;

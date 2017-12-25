@@ -1,8 +1,8 @@
-package net.felixoi.felograms.api.command;
+package net.felixoi.felograms.internal.command;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
+import net.felixoi.felograms.internal.message.Message;
+import net.felixoi.felograms.internal.message.MessageTypes;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -90,7 +90,7 @@ public abstract class Command implements CommandExecutor {
             if (Arrays.stream(classes).anyMatch(clazz -> clazz.isAssignableFrom(source.getClass()))) {
                 return this.process(source, args);
             } else {
-                Message.builder().messageType(MessageTypes.ERROR).localizedLine("command.unaccepted_source").sendTo(source).build();
+                Message.ofLocalized(MessageTypes.ERROR, "command.unaccepted_source").sendTo(source);
                 return CommandResult.success();
             }
         } else {

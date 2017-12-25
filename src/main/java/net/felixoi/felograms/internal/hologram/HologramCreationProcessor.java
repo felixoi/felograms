@@ -1,15 +1,13 @@
-package net.felixoi.felograms.api.hologram;
+package net.felixoi.felograms.internal.hologram;
 
-import net.felixoi.felograms.api.command.Aliases;
-import net.felixoi.felograms.api.command.Permission;
+import net.felixoi.felograms.api.hologram.Hologram;
+import net.felixoi.felograms.internal.command.Aliases;
+import net.felixoi.felograms.internal.command.Permission;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.channel.MessageReceiver;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 public abstract class HologramCreationProcessor {
@@ -32,14 +30,18 @@ public abstract class HologramCreationProcessor {
         return Optional.ofNullable(this.permission);
     }
 
-    public Optional<Hologram.Builder> processInput(Hologram.Builder builder, UUID uuid, Player player, String arguments, Location<World> location){
+    public Optional<Hologram.Builder> processInput(Hologram.Builder builder, Player player, String arguments){
+        checkNotNull(builder, "The variable 'builder' in HologramCreationProcessor#processInput cannot be null.");
+        checkNotNull(player, "The variable 'player' in HologramCreationProcessor#processInput cannot be null.");
+        checkNotNull(arguments, "The variable 'arguments' in HologramCreationProcessor#processInput cannot be null.");
+
         if(this.permission != null && !player.hasPermission(this.permission)) {
             return Optional.of(builder);
         }
 
-        return this.process(builder, uuid, player, arguments, location);
+        return this.process(builder, player, arguments);
     }
 
-    public abstract Optional<Hologram.Builder> process(Hologram.Builder builder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location);
+    public abstract Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments);
 
 }

@@ -1,35 +1,41 @@
 package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.api.command.Aliases;
+import net.felixoi.felograms.internal.command.Aliases;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.api.hologram.HologramCreationProcessor;
-import net.felixoi.felograms.api.message.Message;
-import net.felixoi.felograms.api.message.MessageTypes;
+import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.message.MessageTypes;
+import net.felixoi.felograms.internal.message.MultiMessage;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.serializer.TextSerializers;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Aliases({"add", "addline"})
 public class AddLineHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, UUID uuid, MessageReceiver creator, String arguments, Location<World> location) {
-        Text line = TextSerializers.FORMATTING_CODE.deserialize(arguments);
-        currentBuilder.line(line);
+    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
+        if (arguments != null && !arguments.trim().equals("")) {
+            Text line = TextSerializers.FORMATTING_CODE.deserialize(arguments);
+            builder.line(line);
 
-        Message.builder().messageType(MessageTypes.SUCCESS)
-                .localizedLine("creation.line_added", TextSerializers.FORMATTING_CODE.serialize(line))
-                .line(line)
-                .sendTo(creator).build();
+            MultiMessage.builder()
+                    .localizedMessage(MessageTypes.SUCCESS, "creation.add.success")
+                    .message(MessageTypes.CONSEQUENCE, arguments)
+                    .sendTo(player)
+                    .buildAndSend();
 
-        return Optional.of(currentBuilder);
+            return Optional.of(builder);
+        } else {
+            MultiMessage.builder()
+                    .localizedMessage(MessageTypes.ERROR,"command.arguments.not_enough")
+                    .localizedMessage(MessageTypes.INFO, "creation.add.usage")
+                    .sendTo(player)
+                    .buildAndSend();
+
+            return Optional.empty();
+        }
     }
 
 }

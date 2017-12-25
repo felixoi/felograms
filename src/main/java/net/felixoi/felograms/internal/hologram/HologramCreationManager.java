@@ -1,8 +1,7 @@
-package net.felixoi.felograms.api.hologram;
+package net.felixoi.felograms.internal.hologram;
 
+import net.felixoi.felograms.api.hologram.Hologram;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import java.util.*;
 
@@ -22,6 +21,6 @@ public interface HologramCreationManager {
 
     List<HologramCreationProcessor> getProcessors();
 
-    void process(HologramCreationProcessor processor, UUID uuid, Player player, String arguments, Location<World> location);
+    void process(HologramCreationProcessor processor, Player player, String arguments);
 
 }
