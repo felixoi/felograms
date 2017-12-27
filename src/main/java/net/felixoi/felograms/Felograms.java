@@ -3,11 +3,13 @@ package net.felixoi.felograms;
 import com.google.inject.Inject;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
+import net.felixoi.felograms.api.hologram.HologramService;
 import net.felixoi.felograms.command.FelogramsCommand;
 import net.felixoi.felograms.data.FelogramsHologramData;
 import net.felixoi.felograms.data.FelogramsHologramDataBuilder;
 import net.felixoi.felograms.data.ImmutableFelogramsHologramData;
 import net.felixoi.felograms.hologram.SimpleHologramManager;
+import net.felixoi.felograms.hologram.SimpleHologramService;
 import net.felixoi.felograms.hologram.creation.HologramCreationProcessorRegistry;
 import net.felixoi.felograms.hologram.creation.SimpleHologramCreationManager;
 import net.felixoi.felograms.hologram.store.FileConfigurationHologramStore;
@@ -83,6 +85,8 @@ public class Felograms {
 
         this.picturesDirectory = this.configDir.resolve("images");
         this.createPicturesDirectory();
+
+        Sponge.getServiceManager().setProvider(this, HologramService.class, new SimpleHologramService());
     }
 
     @Listener(order = Order.FIRST)
