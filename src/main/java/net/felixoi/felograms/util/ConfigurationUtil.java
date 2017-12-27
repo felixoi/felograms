@@ -1,6 +1,6 @@
 package net.felixoi.felograms.util;
 
-import com.flowpowered.math.vector.Vector3d;
+import com.flowpowered.math.vector.Vector3i;
 import com.google.common.reflect.TypeToken;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.hologram.SimpleHologram;
@@ -8,7 +8,7 @@ import net.felixoi.felograms.internal.configuration.serializer.HologramTypeSeria
 import net.felixoi.felograms.internal.configuration.serializer.LocationTypeSerializer;
 import net.felixoi.felograms.internal.configuration.serializer.TextTypeSerializer;
 import net.felixoi.felograms.internal.configuration.serializer.UUIDTypeSerializer;
-import net.felixoi.felograms.internal.configuration.serializer.Vector3dTypeSerializer;
+import net.felixoi.felograms.internal.configuration.serializer.Vector3iTypeSerializer;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollection;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import org.spongepowered.api.text.Text;
@@ -22,7 +22,7 @@ public class ConfigurationUtil {
     public static TypeSerializerCollection getStandardSerializers() {
         return TypeSerializers.getDefaultSerializers().newChild()
                 .registerType(TypeToken.of(UUID.class), new UUIDTypeSerializer())
-                .registerType(TypeToken.of(Vector3d.class), new Vector3dTypeSerializer())
+                .registerType(TypeToken.of(Vector3i.class), new Vector3iTypeSerializer())
                 .registerType(new TypeToken<Location<World>>() {
                 }, new LocationTypeSerializer())
                 .registerType(TypeToken.of(Text.class), new TextTypeSerializer())
