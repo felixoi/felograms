@@ -1,12 +1,13 @@
 package net.felixoi.felograms.hologram;
 
+import com.flowpowered.math.vector.Vector3d;
 import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.data.FelogramsKeys;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
+import net.felixoi.felograms.api.exception.WorldNotFoundException;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.internal.hologram.HologramManager;
-import net.felixoi.felograms.util.LocationUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
@@ -16,7 +17,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -24,35 +29,53 @@ public class SimpleHologram implements Hologram {
 
     private static double SPACE_BETWEEN_LINES = 0.25;
 
-    private String id;
+    private HologramManager hologramManager;
+
+    private UUID uuid;
+    private String name;
     private List<Text> lines;
-    private Location<World> location;
+    private UUID worldUUID;
+    private Vector3d position;
     private boolean disabled;
     private List<UUID> entities;
+    private boolean removed;
 
-    private SimpleHologram(String id, List<Text> lines, Location<World> location, boolean disabled) {
-        checkNotNull(id, "The variable 'id' in SimpleHologram#SimpleHologram(name, lines, location) cannot be null.");
-        checkNotNull(lines, "The variable 'lines' in SimpleHologram#SimpleHologram(name, lines, location) cannot be null.");
-        checkNotNull(location, "The variable 'location' in SimpleHologram#SimpleHologram(name, lines, location) cannot be null.");
-
-        this.id = id;
-        this.lines = lines;
-        this.location = location;
+    public SimpleHologram(HologramManager hologramManager, UUID uuid, String name, List<Text> lines, UUID worldUUID, Vector3d position, boolean disabled) {
+        this.hologramManager = checkNotNull(hologramManager, "The variable 'hologramManager' in SimpleHologram#SimpleHologram cannot be null.");
+        this.worldUUID = checkNotNull(worldUUID, "The variable 'worldUUID' in SimpleHologram#SimpleHologram cannot be null.");
+        this.position = checkNotNull(position, "The variable 'position' in SimpleHologram#SimpleHologram cannot be null.");
+        this.lines = checkNotNull(lines, "The variable 'lines' in SimpleHologram#SimpleHologram cannot be null.");
+        this.uuid = checkNotNull(uuid, "The variable 'uuid' in SimpleHologram#SimpleHologram cannot be null.");
         this.disabled = disabled;
+
+        this.removed = false;
         this.entities = new ArrayList<>();
 
-        if (!this.disabled) {
-            this.spawnAssociatedEntities();
-        }
+        this.name = name != null ? name : this.uuid.toString();
+
+        this.hologramManager.addHologram(this);
     }
 
-    public static Hologram.Builder builder() {
-        return new Builder();
+    public SimpleHologram(HologramManager hologramManager, String name, List<Text> lines, UUID worldUUID, Vector3d position) {
+        this(hologramManager, UUID.randomUUID(), name, lines, worldUUID, position, true);
+    }
+
+    public SimpleHologram(HologramManager hologramManager, String name, List<Text> lines, Location<World> location) {
+        this(hologramManager, name, lines, location.getExtent().getUniqueId(), location.getPosition());
+    }
+
+    public SimpleHologram(HologramManager hologramManager, List<Text> lines, Location<World> location) {
+        this(hologramManager, null, lines, location);
     }
 
     @Override
-    public String getID() {
-        return this.id;
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = checkNotNull(name, "The variable 'name' in SimpleHologram#setName cannot be null.");
     }
 
     @Override
@@ -61,8 +84,30 @@ public class SimpleHologram implements Hologram {
     }
 
     @Override
-    public Location<World> getLocation() {
-        return this.location;
+    public void setLines(List<Text> lines) {
+        this.lines = checkNotNull(lines, "The variable 'lines' in SimpleHologram#setLines cannot be null.");
+    }
+
+    @Override
+    public UUID getWorldUniqueID() {
+        return this.worldUUID;
+    }
+
+    @Override
+    public Vector3d getPosition() {
+        return this.position;
+    }
+
+    @Override
+    public void setLocation(Location<World> location) {
+        checkNotNull(location, "The variable 'location' in SimpleHologram#setLocation cannot be null.");
+
+        this.removeAssociatedEntities();
+
+        this.worldUUID = location.getExtent().getUniqueId();
+        this.position = location.getPosition();
+
+        this.spawnAssociatedEntities();
     }
 
     @Override
@@ -71,175 +116,112 @@ public class SimpleHologram implements Hologram {
     }
 
     @Override
+    public void setDisabled(boolean disabled) {
+        if (disabled) {
+            this.removeAssociatedEntities();
+            this.disabled = true;
+        } else {
+            this.spawnAssociatedEntities();
+            this.disabled = false;
+        }
+    }
+
+    @Override
+    public boolean isRemoved() {
+        return this.removed;
+    }
+
+    @Override
+    public void remove() {
+        if (!this.disabled) {
+            this.setDisabled(true);
+        }
+
+        this.hologramManager.removeHologram(this.uuid);
+    }
+
+    @Override
     public List<UUID> getAssociatedEntities() {
         return this.entities;
     }
 
     @Override
-    public void spawnAssociatedEntities() {
+    public void spawnAssociatedEntities() throws WorldNotFoundException {
         Optional<DataManipulatorBuilder<HologramData, ImmutableHologramData>> hologramDataBuilder =
                 Sponge.getDataManager().getManipulatorBuilder(HologramData.class);
 
         if (hologramDataBuilder.isPresent()) {
-            for (int index = 0; index < this.lines.size(); index++) {
-                Text currentLine = this.lines.get(index);
+            Optional<World> world = Sponge.getServer().getWorld(this.worldUUID);
 
-                double y = this.lines.size() * SPACE_BETWEEN_LINES - index * SPACE_BETWEEN_LINES - 0.5;
-                Entity armorStand = this.getLocation().getExtent().createEntity(EntityTypes.ARMOR_STAND,
-                        LocationUtil.getBlockMiddle(this.location.getBlockPosition()).add(0, y, 0));
+            if (world.isPresent()) {
+                Location<World> location = new Location<>(world.get(), this.position);
 
-                // offer data to armor stand
-                armorStand.offer(Keys.DISPLAY_NAME, currentLine);
-                armorStand.offer(Keys.CUSTOM_NAME_VISIBLE, true);
-                armorStand.offer(Keys.ARMOR_STAND_MARKER, true);
-                armorStand.offer(Keys.INVISIBLE, true);
-                armorStand.offer(Keys.HAS_GRAVITY, false);
+                for (int index = 0; index < this.lines.size(); index++) {
+                    Text currentLine = this.lines.get(index);
 
-                // offer custom data to identify hologram entities
+                    double y = this.lines.size() * SPACE_BETWEEN_LINES - index * SPACE_BETWEEN_LINES - 0.5;
+                    Entity armorStand = location.getExtent().createEntity(EntityTypes.ARMOR_STAND,
+                            this.position.add(0, y, 0));
 
-                HologramData hologramData = hologramDataBuilder.get().create();
-                hologramData.set(FelogramsKeys.IS_HOLOGRAM, true);
-                armorStand.offer(hologramData);
+                    // offer data to armor stand
+                    armorStand.offer(Keys.DISPLAY_NAME, currentLine);
+                    armorStand.offer(Keys.CUSTOM_NAME_VISIBLE, true);
+                    armorStand.offer(Keys.ARMOR_STAND_MARKER, true);
+                    armorStand.offer(Keys.INVISIBLE, true);
+                    armorStand.offer(Keys.HAS_GRAVITY, false);
 
-                this.entities.add(armorStand.getUniqueId());
-                this.location.getExtent().spawnEntity(armorStand);
+                    // offer custom data to identify hologram entities
+
+                    HologramData hologramData = hologramDataBuilder.get().create();
+                    hologramData.set(FelogramsKeys.IS_HOLOGRAM, true);
+                    armorStand.offer(hologramData);
+
+                    this.entities.add(armorStand.getUniqueId());
+                    location.getExtent().spawnEntity(armorStand);
+                }
+
+                this.disabled = false;
+            } else {
+                throw new WorldNotFoundException(this.worldUUID.toString());
             }
-
-            this.disabled = false; // if all entities are present the hologram is showed and as result the hologram is enabled.
         } else {
-            Felograms.getInstance().getLogger().error("Failed to retrieve the DataManipulatorBuilder for HologramData!");
+            Felograms.getInstance().getLogger().error("Failed to retrieve the DataManipulatorBuilder for HologramData." +
+                    "\nAbandoned to spawnAssociatedEntities entities for hologram " + this.uuid + "!");
         }
     }
 
     @Override
-    public void removeAssociatedEntities() {
-        Iterator<UUID> iterator = this.entities.iterator();
+    public void removeAssociatedEntities() throws WorldNotFoundException {
+        Optional<World> world = Sponge.getServer().getWorld(this.worldUUID);
 
-        while (iterator.hasNext()) {
-            UUID uuid = iterator.next();
+        if (world.isPresent()) {
+            Location<World> location = new Location<>(world.get(), this.position);
+            Iterator<UUID> iterator = this.entities.iterator();
 
-            Optional<Entity> entity = this.location.getExtent().getEntity(uuid);
-            if (entity.isPresent()) {
-                entity.get().remove();
-                iterator.remove();
+            while (iterator.hasNext()) {
+                UUID uuid = iterator.next();
+
+                Optional<Entity> entity = location.getExtent().getEntity(uuid);
+                if (entity.isPresent()) {
+                    entity.get().remove();
+                    iterator.remove();
+                }
             }
-        }
 
-        this.disabled = true; // if no entity is present the hologram is automatically disabled because it's not showed anymore
+            this.disabled = true;
+        } else {
+            throw new WorldNotFoundException(this.worldUUID.toString());
+        }
     }
 
     @Override
-    public void forceRespawnAssociatedEntities() {
-        this.removeAssociatedEntities();
-        this.spawnAssociatedEntities();
+    public boolean areAssociatedEntitiesRemoved() {
+        return this.disabled;
     }
 
-    protected static class Builder implements Hologram.Builder {
-
-        private HologramManager hologramManager;
-        private String id;
-        private List<Text> lines;
-        private Location<World> location;
-        private boolean disabled = false;
-
-        private Builder() {
-            this.lines = new ArrayList<>();
-        }
-
-        @Override
-        public Hologram.Builder setManager(HologramManager hologramManager) {
-            this.hologramManager = checkNotNull(hologramManager, "The variable 'hologramManager' in Builder#setManager(hologramManager) cannot be null.");
-
-            return this;
-        }
-
-        @Override
-        public Hologram.Builder setID(String id) {
-            this.id = checkNotNull(id, "The variable 'id' in Builder#id(id) cannot be null.");
-
-            return this;
-        }
-
-        @Override
-        public Optional<String> getID() {
-            return Optional.ofNullable(this.id);
-        }
-
-        @Override
-        public Hologram.Builder line(Text line) {
-            checkNotNull(line, "The variable 'line' in Builder#line(line) cannot be null.");
-
-            this.lines.add(line);
-
-            return this;
-        }
-
-        @Override
-        public Hologram.Builder setLines(List<Text> lines) {
-            this.lines = checkNotNull(lines, "The variable 'lines' in Builder#lines(lines) cannot be null.");
-            ;
-
-            return this;
-        }
-
-        @Override
-        public List<Text> getLines() {
-            return this.lines;
-        }
-
-        @Override
-        public Hologram.Builder setLocation(Location<World> location) {
-            this.location = checkNotNull(location, "The variable 'location' in Builder#location(location) cannot be null.");
-            ;
-
-            return this;
-        }
-
-        @Override
-        public Hologram.Builder setDisabled(boolean disabled) {
-            this.disabled = disabled;
-
-            return this;
-        }
-
-        @Override
-        public Hologram build() {
-            checkNotNull(this.id, "The variable 'id' in Builder#build() cannot be null.");
-            checkNotNull(this.lines, "The variable 'lines' in Builder#build() cannot be null.");
-            checkNotNull(this.location, "The variable 'location' in Builder#build() cannot be null.");
-
-            return new SimpleHologram(this.id, this.lines, this.location, this.disabled);
-        }
-
-        @Override
-        public Hologram buildAndRegister() {
-            checkNotNull(this.hologramManager, "The variable 'this.hologramManager' in Builder#buildAndRegister() cannot be null.");
-
-            Hologram hologram = this.build();
-            this.hologramManager.addHologram(hologram);
-
-            return hologram;
-        }
-
-        @Override
-        public Hologram.Builder from(Hologram hologram) {
-            this.id = hologram.getID();
-            this.lines = hologram.getLines();
-            this.location = hologram.getLocation();
-
-            return this;
-        }
-
-        @Override
-        public Hologram.Builder reset() {
-            this.id = null;
-            this.lines = null;
-            this.location = null;
-            this.disabled = false;
-
-            return this;
-        }
-
+    @Override
+    public UUID getUniqueId() {
+        return this.uuid;
     }
 
 }

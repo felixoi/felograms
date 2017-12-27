@@ -1,8 +1,8 @@
-package net.felixoi.felograms.hologram.creation;
+package net.felixoi.felograms.hologram.creation.processor;
 
 import net.felixoi.felograms.internal.command.Aliases;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import net.felixoi.felograms.internal.message.MultiMessage;
 import org.spongepowered.api.entity.living.player.Player;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class AddLineHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
+    public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
         if (arguments != null && !arguments.trim().equals("")) {
             Text line = TextSerializers.FORMATTING_CODE.deserialize(arguments);
             builder.line(line);
@@ -29,7 +29,7 @@ public class AddLineHologramCreationProcessor extends HologramCreationProcessor 
             return Optional.of(builder);
         } else {
             MultiMessage.builder()
-                    .localizedMessage(MessageTypes.ERROR,"command.arguments.not_enough")
+                    .localizedMessage(MessageTypes.ERROR, "command.arguments.not_enough")
                     .localizedMessage(MessageTypes.INFO, "creation.add.usage")
                     .sendTo(player)
                     .buildAndSend();

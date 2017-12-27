@@ -1,7 +1,7 @@
 package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.Message;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -24,16 +24,16 @@ public class SendCommandListener {
             Optional<HologramCreationProcessor> processor =
                     Felograms.getInstance().getHologramCreationManager().getProcessors().stream().filter(hologramCreationProcessor -> {
 
-                StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder stringBuilder = new StringBuilder();
 
-                for (String alias : hologramCreationProcessor.getAliases()) {
-                    stringBuilder.append(alias).append("|");
-                }
+                        for (String alias : hologramCreationProcessor.getAliases()) {
+                            stringBuilder.append(alias).append("|");
+                        }
 
-                String aliasRegEx = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+                        String aliasRegEx = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
 
-                return event.getCommand().matches("(?i:(" + aliasRegEx + "))");
-            }).findFirst();
+                        return event.getCommand().matches("(?i:(" + aliasRegEx + "))");
+                    }).findFirst();
 
             if (processor.isPresent()) {
                 Felograms.getInstance().getHologramCreationManager().process(processor.get(), player, event.getArguments());

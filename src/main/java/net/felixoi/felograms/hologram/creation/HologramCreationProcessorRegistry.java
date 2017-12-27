@@ -1,6 +1,15 @@
 package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.internal.hologram.HologramCreationManager;
+import net.felixoi.felograms.hologram.creation.processor.AddImageHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.AddLineHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.DeleteHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.ExitHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.FinishHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.IDHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.InsertHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.ModifyHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.StatusHologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationManager;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -1,9 +1,9 @@
-package net.felixoi.felograms.hologram.creation;
+package net.felixoi.felograms.hologram.creation.processor;
 
 import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.internal.command.Aliases;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.Message;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ExitHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
+    public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
         Felograms.getInstance().getHologramCreationManager().stopCreation(player.getUniqueId());
         Message.ofLocalized(MessageTypes.WARNING, "creation.quit.manual").sendTo(player);
 

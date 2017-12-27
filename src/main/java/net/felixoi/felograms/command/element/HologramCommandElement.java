@@ -34,7 +34,7 @@ public class HologramCommandElement extends CommandElement {
 
     @Override
     public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
-        List<String> choices = Felograms.getInstance().getHologramManager().getHolograms().stream().map(Hologram::getID).collect(Collectors.toList());
+        List<String> choices = Felograms.getInstance().getHologramManager().getHolograms().stream().map(Hologram::getName).collect(Collectors.toList());
 
         final Optional<String> nextArg = args.nextIfPresent();
         if (nextArg.isPresent()) {

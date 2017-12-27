@@ -1,21 +1,21 @@
 package net.felixoi.felograms;
 
 import com.google.inject.Inject;
-import net.felixoi.felograms.internal.command.Command;
-import net.felixoi.felograms.internal.configuration.SimpleConfiguration;
 import net.felixoi.felograms.api.data.HologramData;
 import net.felixoi.felograms.api.data.ImmutableHologramData;
-import net.felixoi.felograms.internal.hologram.HologramCreationManager;
-import net.felixoi.felograms.internal.hologram.HologramManager;
-import net.felixoi.felograms.internal.hologram.HologramStore;
 import net.felixoi.felograms.command.FelogramsCommand;
 import net.felixoi.felograms.data.FelogramsHologramData;
 import net.felixoi.felograms.data.FelogramsHologramDataBuilder;
 import net.felixoi.felograms.data.ImmutableFelogramsHologramData;
-import net.felixoi.felograms.hologram.SimpleHologramCreationManager;
 import net.felixoi.felograms.hologram.SimpleHologramManager;
 import net.felixoi.felograms.hologram.creation.HologramCreationProcessorRegistry;
+import net.felixoi.felograms.hologram.creation.SimpleHologramCreationManager;
 import net.felixoi.felograms.hologram.store.FileConfigurationHologramStore;
+import net.felixoi.felograms.internal.command.Command;
+import net.felixoi.felograms.internal.configuration.SimpleConfiguration;
+import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.HologramStore;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationManager;
 import net.felixoi.felograms.listener.ListenerRegistry;
 import net.felixoi.felograms.util.ConfigurationUtil;
 import net.felixoi.felograms.util.LocaleUtil;
@@ -56,7 +56,6 @@ public class Felograms {
     private Path configDir;
 
     private HologramManager hologramManager;
-    private HologramStore hologramStore;
     private HologramCreationManager hologramCreationManager;
     private Path picturesDirectory;
 
@@ -80,24 +79,23 @@ public class Felograms {
                 .dataName("Felograms Data")
                 .buildAndRegister(this.pluginContainer);
 
-        Sponge.getDataManager().registerBuilder(HologramData.class, new FelogramsHologramDataBuilder());
-
         ListenerRegistry.registerListeners(this.pluginContainer);
 
         this.picturesDirectory = this.configDir.resolve("images");
         this.createPicturesDirectory();
     }
 
-    @Listener(order = Order.EARLY)
+    @Listener(order = Order.FIRST)
     public void onServerStart(GameStartingServerEvent event) {
-        this.hologramStore = new FileConfigurationHologramStore(SimpleConfiguration.builder()
+        this.hologramManager = new SimpleHologramManager();
+
+        HologramStore hologramStore = new FileConfigurationHologramStore(SimpleConfiguration.builder()
                 .setPath(this.configDir.resolve("data.conf"))
                 .setSerializerCollection(ConfigurationUtil.getStandardSerializers())
                 .build());
+        this.hologramManager.load(hologramStore);
 
-        this.hologramManager = new SimpleHologramManager(this.hologramStore);
-
-        this.hologramCreationManager = new SimpleHologramCreationManager();
+        this.hologramCreationManager = new SimpleHologramCreationManager(this.hologramManager);
         HologramCreationProcessorRegistry.registerProcessors(this.hologramCreationManager);
 
         Command command = new FelogramsCommand();
@@ -116,10 +114,6 @@ public class Felograms {
 
     public HologramCreationManager getHologramCreationManager() {
         return this.hologramCreationManager;
-    }
-
-    public HologramStore getHologramStore() {
-        return this.hologramStore;
     }
 
     public Path getPicturesDirectory() {

@@ -2,12 +2,12 @@ package net.felixoi.felograms.internal.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface HologramStore {
 
-    Collection<Hologram> loadHolograms();
+    List<Hologram> loadHolograms();
 
-    void saveHolograms(Collection<Hologram> holograms);
+    void saveHolograms(List<Hologram> holograms);
 
 }

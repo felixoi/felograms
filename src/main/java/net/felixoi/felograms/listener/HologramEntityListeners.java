@@ -17,7 +17,7 @@ public class HologramEntityListeners {
         Sponge.getServer().getWorlds().forEach(this::removeHologramEntities);
 
         Felograms.getInstance().getHologramManager().getHolograms().forEach(hologram -> {
-            if(!hologram.isDisabled()) {
+            if (!hologram.isDisabled()) {
                 hologram.spawnAssociatedEntities();
             }
         });
@@ -30,7 +30,7 @@ public class HologramEntityListeners {
 
     private void removeHologramEntities(World world) {
         world.getEntities().forEach(entity -> {
-            if(entity.getType().equals(EntityTypes.ARMOR_STAND) && entity.get(FelogramsKeys.IS_HOLOGRAM).isPresent()) {
+            if (entity.getType().equals(EntityTypes.ARMOR_STAND) && entity.get(FelogramsKeys.IS_HOLOGRAM).isPresent()) {
                 entity.remove();
             }
         });

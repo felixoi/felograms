@@ -1,7 +1,7 @@
 package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.hologram.creation.AddLineHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.AddLineHologramCreationProcessor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;

@@ -2,7 +2,7 @@ package net.felixoi.felograms.internal.configuration.serializer;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.google.common.reflect.TypeToken;
-import net.felixoi.felograms.internal.exception.WorldNotFoundException;
+import net.felixoi.felograms.api.exception.WorldNotFoundException;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;

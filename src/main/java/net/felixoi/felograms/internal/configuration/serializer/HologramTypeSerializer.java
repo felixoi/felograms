@@ -1,46 +1,42 @@
 package net.felixoi.felograms.internal.configuration.serializer;
 
+import com.flowpowered.math.vector.Vector3d;
 import com.google.common.reflect.TypeToken;
+import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.Hologram;
+import net.felixoi.felograms.hologram.SimpleHologram;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.UUID;
 
 public class HologramTypeSerializer implements TypeSerializer<Hologram> {
 
-    private Hologram.Builder builder;
-
-    public HologramTypeSerializer(Hologram.Builder builder) {
-        this.builder = checkNotNull(builder, "The variable 'builder' in HologramTypeSerializer#HologramTypeSerializer(builder) cannot be null.");
-    }
-
     @Override
     public Hologram deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-        String id = value.getNode("id").getString();
-        List<Text> lines = value.getNode("lines").getList(TypeToken.of(Text.class));
-        Location<World> location = value.getNode("location").getValue(new TypeToken<Location<World>>() {
+        UUID uuid = value.getNode("uuid").getValue(TypeToken.of(UUID.class));
+        String name = value.getNode("name").getString();
+        List<Text> lines = value.getNode("lines").getList(new TypeToken<Text>() {
         });
+        UUID worldUUID = value.getNode("world").getValue(TypeToken.of(UUID.class));
+        Vector3d position = value.getNode("position").getValue(TypeToken.of(Vector3d.class));
         boolean disabled = value.getNode("disabled").getBoolean();
 
-        return this.builder.setID(id).setLines(lines).setLocation(location).setDisabled(disabled).build();
+        return new SimpleHologram(Felograms.getInstance().getHologramManager(), uuid, name, lines, worldUUID, position, disabled);
     }
 
     @Override
     public void serialize(TypeToken<?> type, Hologram hologram, ConfigurationNode value) throws ObjectMappingException {
-        value.getNode("id").setValue(hologram.getID());
+        value.getNode("uuid").setValue(TypeToken.of(UUID.class), hologram.getWorldUniqueID());
+        value.getNode("name").setValue(hologram.getName());
         value.getNode("lines").setValue(new TypeToken<List<Text>>() {
         }, hologram.getLines());
-        value.getNode("location").setValue(new TypeToken<Location<World>>() {
-        }, hologram.getLocation());
+        value.getNode("world").setValue(TypeToken.of(UUID.class), hologram.getWorldUniqueID());
+        value.getNode("position").setValue(TypeToken.of(Vector3d.class), hologram.getPosition());
         value.getNode("disabled").setValue(hologram.isDisabled());
     }
 
 }
-

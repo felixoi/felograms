@@ -1,6 +1,5 @@
-package net.felixoi.felograms.internal.hologram;
+package net.felixoi.felograms.internal.hologram.creation;
 
-import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.internal.command.Aliases;
 import net.felixoi.felograms.internal.command.Permission;
 import org.spongepowered.api.entity.living.player.Player;
@@ -30,18 +29,18 @@ public abstract class HologramCreationProcessor {
         return Optional.ofNullable(this.permission);
     }
 
-    public Optional<Hologram.Builder> processInput(Hologram.Builder builder, Player player, String arguments){
+    public Optional<HologramCreationBuilder> processInput(HologramCreationBuilder builder, Player player, String arguments) {
         checkNotNull(builder, "The variable 'builder' in HologramCreationProcessor#processInput cannot be null.");
         checkNotNull(player, "The variable 'player' in HologramCreationProcessor#processInput cannot be null.");
         checkNotNull(arguments, "The variable 'arguments' in HologramCreationProcessor#processInput cannot be null.");
 
-        if(this.permission != null && !player.hasPermission(this.permission)) {
+        if (this.permission != null && !player.hasPermission(this.permission)) {
             return Optional.of(builder);
         }
 
         return this.process(builder, player, arguments);
     }
 
-    public abstract Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments);
+    public abstract Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments);
 
 }

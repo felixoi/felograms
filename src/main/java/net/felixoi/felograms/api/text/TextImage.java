@@ -12,6 +12,9 @@ import java.awt.image.BufferedImage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * A {@link TextElement} to represent images using a {@link Text}
+ */
 public class TextImage implements TextElement {
 
     private final static char TRANSPARENT_CHAR = ' ';
@@ -29,21 +32,43 @@ public class TextImage implements TextElement {
     private TextImage(BufferedImage image, int height) {
         this.image = checkNotNull(image, "The variable 'image' in TextImage#TextImage(image, height) cannot be null.");
         this.height = height;
-        this.texts = this.createTexts();
+        this.texts = this.createTextArray();
     }
 
+    /**
+     * Creates a new {@link TextImage} instance.
+     *
+     * @param image  the {@link BufferedImage}
+     * @param height the height in pixels the image should have
+     * @return the created {@link TextImage} instance
+     */
     public static TextImage of(BufferedImage image, int height) {
         return new TextImage(image, height);
     }
 
+    /**
+     * Gets the {@link BufferedImage} which is going to be converted to an {@link Text} array.
+     *
+     * @return the the {@link BufferedImage}
+     */
     public BufferedImage getImage() {
         return this.image;
     }
 
+    /**
+     * Gets the height (in pixels) the representing {@link Text} image should have.
+     *
+     * @return the height
+     */
     public int getHeight() {
         return this.height;
     }
 
+    /**
+     * Returns the {@link Text} array which represents the {@link BufferedImage}.
+     *
+     * @return the {@link Text} array
+     */
     public Text[] toText() {
         return this.texts;
     }
@@ -56,7 +81,7 @@ public class TextImage implements TextElement {
         }
     }
 
-    private Text[] createTexts() {
+    private Text[] createTextArray() {
         TextColor[][] colors = this.createTextColorArray();
 
         Text[] lines = new Text[colors[0].length];
@@ -67,7 +92,7 @@ public class TextImage implements TextElement {
             for (TextColor[] textColor : colors) {
                 TextColor color = textColor[y];
 
-                line.append(color == null ? Text.of(TRANSPARENT_CHAR) : Text.of(textColor[y], NORMAL_CHAR));
+                line.append(color == null ? Text.of(TRANSPARENT_CHAR, TRANSPARENT_CHAR) : Text.of(textColor[y], NORMAL_CHAR));
             }
 
             lines[y] = Text.of(line, TextColors.RESET);
@@ -101,9 +126,16 @@ public class TextImage implements TextElement {
         return operation.filter(this.image, null);
     }
 
+    /**
+     * //todo https://stackoverflow.com/questions/45821450/calculating-distance-between-two-lab-colors-java
+     *
+     * @param firstColor
+     * @param secondColor
+     * @return
+     */
     private double getDistanceBetweenColors(Color firstColor, Color secondColor) {
-        checkNotNull(firstColor, "The variable 'firstColor' in TextImage#getDistanceBetweenColors(firstColor, secondColor) cannot be null.");
-        checkNotNull(secondColor, "The variable 'secondColor' in TextImage#getDistanceBetweenColors(firstColor, secondColor) cannot be null.");
+        checkNotNull(firstColor, "The variable 'firstColor' in TextImage#getDistanceBetweenColors cannot be null.");
+        checkNotNull(secondColor, "The variable 'secondColor' in TextImage#getDistanceBetweenColors cannot be null.");
 
         double rmean = (firstColor.getRed() + secondColor.getRed()) / 2.0;
         double r = firstColor.getRed() - secondColor.getRed();
@@ -115,17 +147,30 @@ public class TextImage implements TextElement {
         return weightR * r * r + weightG * g * g + weightB * b * b;
     }
 
+    /**
+     * Returns whether two {@link Color}s are nearly identical.
+     *
+     * @param firstColor  the first {@link Color}
+     * @param secondColor the second {@link Color}
+     * @return true if the {@link Color}s are nearly identical
+     */
     private boolean isColorIdentical(Color firstColor, Color secondColor) {
-        checkNotNull(firstColor, "The variable 'firstColor' in TextImage#isColorIdentical(firstColor, secondColor) cannot be null.");
-        checkNotNull(secondColor, "The variable 'secondColor' in TextImage#isColorIdentical(firstColor, secondColor) cannot be null.");
+        checkNotNull(firstColor, "The variable 'firstColor' in TextImage#isColorIdentical cannot be null.");
+        checkNotNull(secondColor, "The variable 'secondColor' in TextImage#isColorIdentical cannot be null.");
 
         return Math.abs(firstColor.getRed() - secondColor.getRed()) <= 5 &&
                 Math.abs(firstColor.getGreen() - secondColor.getGreen()) <= 5 &&
                 Math.abs(firstColor.getBlue() - secondColor.getBlue()) <= 5;
     }
 
+    /**
+     * Gets the {@link TextColor} which comes closest to the specified color
+     *
+     * @param color the color
+     * @return the closest {@link TextColor}
+     */
     private TextColor getClosestTextColor(Color color) {
-        checkNotNull(color, "The variable 'color' in TextImage#getClosestTextColor(color) cannot be null.");
+        checkNotNull(color, "The variable 'color' in TextImage#getClosestTextColor cannot be null.");
 
         if (color.getAlpha() < 128) return null;
 

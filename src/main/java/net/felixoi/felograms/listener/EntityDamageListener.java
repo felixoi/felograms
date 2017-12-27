@@ -12,7 +12,7 @@ public class EntityDamageListener {
     @Listener
     public void onDamage(DamageEntityEvent event, @Getter("getTargetEntity") Entity entity) {
         if (entity.getType().equals(EntityTypes.ARMOR_STAND)) {
-           Felograms.getInstance().getHologramManager().getHolograms().forEach(hologram -> hologram.getAssociatedEntities().forEach(hologramEntity -> {
+            Felograms.getInstance().getHologramManager().getHolograms().forEach(hologram -> hologram.getAssociatedEntities().forEach(hologramEntity -> {
                 if (entity.getUniqueId().equals(hologramEntity)) {
                     event.setCancelled(true);
                 }

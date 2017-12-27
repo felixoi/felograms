@@ -1,8 +1,8 @@
-package net.felixoi.felograms.hologram.creation;
+package net.felixoi.felograms.hologram.creation.processor;
 
 import net.felixoi.felograms.internal.command.Aliases;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.Message;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import net.felixoi.felograms.internal.message.MultiMessage;
@@ -16,21 +16,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class StatusHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder currentBuilder, Player player, String arguments) {
-        if (currentBuilder.getLines().isEmpty()) {
+    public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
+        if (builder.getLines().isEmpty()) {
             Message.ofLocalized(MessageTypes.INFO, "creation.status.empty").sendTo(player);
         } else {
-            MultiMessage.Builder builder = MultiMessage.builder().localizedMessage(MessageTypes.INFO, "creation.status.show");
+            MultiMessage.Builder messageBuilder = MultiMessage.builder().localizedMessage(MessageTypes.INFO, "creation.status.show");
 
             AtomicInteger index = new AtomicInteger();
 
-            currentBuilder.getLines().forEach(line -> {
+            builder.getLines().forEach(line -> {
                 int currentIndex = index.incrementAndGet();
 
-                builder.message(MessageTypes.CONSEQUENCE, Text.of(currentIndex + ". ", line));
+                messageBuilder.message(MessageTypes.CONSEQUENCE, Text.of(currentIndex + ". ", line));
             });
 
-            builder.sendTo(player).buildAndSend();
+            messageBuilder.sendTo(player).buildAndSend();
         }
 
         return Optional.empty();

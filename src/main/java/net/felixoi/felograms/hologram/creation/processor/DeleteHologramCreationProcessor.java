@@ -1,8 +1,8 @@
-package net.felixoi.felograms.hologram.creation;
+package net.felixoi.felograms.hologram.creation.processor;
 
 import net.felixoi.felograms.internal.command.Aliases;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.Message;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import net.felixoi.felograms.internal.message.MultiMessage;
@@ -12,14 +12,14 @@ import org.spongepowered.api.text.Text;
 import java.util.List;
 import java.util.Optional;
 
-@Aliases({"delete", "del", "remove", "rm"})
+@Aliases({"delete", "del", "removeAssociatedEntities", "rm"})
 public class DeleteHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
+    public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
         String[] args = arguments.split(" ");
 
-        if(args.length == 1) {
+        if (args.length == 1) {
             try {
                 int lineNumber = Integer.valueOf(args[0]);
 

@@ -16,12 +16,12 @@ public final class MultiMessage {
         this.messages = checkNotNull(messages, "The variable 'messages' in MultiMessage#MultiMessage cannot be null.");
     }
 
-    public List<Message> getMessages() {
-        return this.messages;
-    }
-
     public static Builder builder() {
         return new Builder();
+    }
+
+    public List<Message> getMessages() {
+        return this.messages;
     }
 
     public static class Builder {

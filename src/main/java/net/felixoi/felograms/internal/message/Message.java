@@ -22,9 +22,9 @@ public final class Message implements TextRepresentable {
         this.messageType = checkNotNull(messageType, "The variable 'messageType' in Message#Message cannot be null.");
         checkNotNull(text, "The variable 'text' in Message#Message cannot be null.");
 
-        if(messageType.equals(MessageTypes.CONSEQUENCE)) {
+        if (messageType.equals(MessageTypes.CONSEQUENCE)) {
             this.text = Text.of(TextColors.GRAY, CONSEQUENCE_PREFIX, " ", TextColors.RESET, text);
-        } else if(messageType.equals(MessageTypes.NONE)) {
+        } else if (messageType.equals(MessageTypes.NONE)) {
             this.text = text;
         } else {
             this.text = Text.of(messageType.getColor(), PREFIX, " ", TextColors.GRAY, DIVIDER, " ", TextColors.RESET, text);
@@ -61,7 +61,7 @@ public final class Message implements TextRepresentable {
     }
 
     public void sendTo(MessageReceiver... receivers) {
-        for(MessageReceiver receiver : receivers) {
+        for (MessageReceiver receiver : receivers) {
             receiver.sendMessage(this.text);
         }
     }

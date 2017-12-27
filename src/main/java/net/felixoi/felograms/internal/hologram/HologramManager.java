@@ -2,22 +2,24 @@ package net.felixoi.felograms.internal.hologram;
 
 import net.felixoi.felograms.api.hologram.Hologram;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.UUID;
 
 public interface HologramManager {
 
-    Collection<Hologram> getHolograms();
-
-    Set<String> getHologramIDs();
+    List<Hologram> getHolograms();
 
     void addHologram(Hologram hologram);
 
-    Optional<Hologram> getHologram(String hologramID);
+    Optional<Hologram> getHologram(UUID uuid);
 
-    void removeHologram(String hologramID);
+    Optional<Hologram> getHologram(String name);
 
-    boolean isExistent(String hologramID);
+    void removeHologram(UUID uuid);
+
+    void load(HologramStore store);
+
+    void save(HologramStore store);
 
 }

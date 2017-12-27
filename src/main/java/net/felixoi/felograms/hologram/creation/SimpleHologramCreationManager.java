@@ -1,27 +1,35 @@
-package net.felixoi.felograms.hologram;
+package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationManager;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationManager;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SimpleHologramCreationManager implements HologramCreationManager {
 
-    private Map<UUID, Hologram.Builder> creations;
+    private HologramManager hologramManager;
+    private Map<UUID, HologramCreationBuilder> creations;
     private List<HologramCreationProcessor> processors;
 
-    public SimpleHologramCreationManager() {
+    public SimpleHologramCreationManager(HologramManager hologramManager) {
+        this.hologramManager = checkNotNull(hologramManager, "The variable 'hologramManager' in SimpleHologramCreationManager#SimpleHologramCreationManager cannot be null.");
         this.creations = new HashMap<>();
         this.processors = new ArrayList<>();
     }
 
     @Override
-    public Map<UUID, Hologram.Builder> getCreations() {
+    public Map<UUID, HologramCreationBuilder> getCreations() {
         return this.creations;
     }
 
@@ -31,7 +39,7 @@ public class SimpleHologramCreationManager implements HologramCreationManager {
     }
 
     @Override
-    public Optional<Hologram.Builder> getCreation(UUID uuid) {
+    public Optional<HologramCreationBuilder> getCreation(UUID uuid) {
         checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#getCreation(uuid) cannot be null.");
 
         return Optional.ofNullable(this.creations.get(uuid));
@@ -42,7 +50,7 @@ public class SimpleHologramCreationManager implements HologramCreationManager {
         checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#startCreation(uuid) cannot be null.");
         checkNotNull(hologramID, "The variable 'hologramID' in SimpleHologramCreationManager#startCreation(uuid, hologramID) cannot be null.");
 
-        this.creations.put(uuid, SimpleHologram.builder().setManager(Felograms.getInstance().getHologramManager()).setID(hologramID));
+        this.creations.put(uuid, new SimpleCreationBuilder(this.hologramManager, hologramID));
     }
 
     @Override
@@ -71,7 +79,7 @@ public class SimpleHologramCreationManager implements HologramCreationManager {
         UUID uuid = player.getUniqueId();
 
         if (this.getCreation(uuid).isPresent()) {
-            Optional<Hologram.Builder> builder = processor.processInput(this.getCreation(uuid).get(), player, arguments);
+            Optional<HologramCreationBuilder> builder = processor.processInput(this.getCreation(uuid).get(), player, arguments);
 
             builder.ifPresent(creation -> this.creations.put(uuid, creation));
         }

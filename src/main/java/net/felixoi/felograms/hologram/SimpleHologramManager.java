@@ -4,64 +4,68 @@ import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.internal.hologram.HologramManager;
 import net.felixoi.felograms.internal.hologram.HologramStore;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SimpleHologramManager implements HologramManager {
 
-    private HologramStore hologramStore;
-    private Map<String, Hologram> holograms;
+    private Map<UUID, Hologram> holograms;
 
-    public SimpleHologramManager(HologramStore hologramStore) {
-        this.hologramStore = checkNotNull(hologramStore, "The variable 'holograms' in SimpleHologramManager#SimpleHologramManager(holograms) cannot be null.");
-
+    public SimpleHologramManager() {
         this.holograms = new HashMap<>();
-
-        hologramStore.loadHolograms().forEach(hologram -> {
-            this.holograms.put(hologram.getID(), hologram);
-        });
     }
 
     @Override
-    public Collection<Hologram> getHolograms() {
-        return this.holograms.values();
-    }
-
-    @Override
-    public Set<String> getHologramIDs() {
-        return this.holograms.keySet();
+    public List<Hologram> getHolograms() {
+        return new ArrayList<>(this.holograms.values());
     }
 
     @Override
     public void addHologram(Hologram hologram) {
-        checkNotNull(hologram, "The variable 'hologram' in SimpleHologramManager#addHologram(hologram) cannot be null.");
+        checkNotNull(hologram, "The variable 'hologram' in SimpleHologramManager#addHologram cannot be null.");
 
-        this.holograms.put(hologram.getID(), hologram);
-        this.hologramStore.saveHolograms(this.holograms.values());
+        this.holograms.put(hologram.getUniqueId(), hologram);
     }
 
     @Override
-    public Optional<Hologram> getHologram(String hologramID) {
-        if (this.isExistent(hologramID)) {
-            return Optional.of(this.holograms.get(hologramID));
-        } else {
-            return Optional.empty();
-        }
+    public Optional<Hologram> getHologram(UUID uuid) {
+        return this.holograms.containsKey(uuid) ? Optional.of(this.holograms.get(uuid)) : Optional.empty();
     }
 
     @Override
-    public void removeHologram(String hologramID) {
-        if (this.getHologram(hologramID).isPresent()) {
-            this.getHologram(hologramID).get().removeAssociatedEntities();
-        }
+    public Optional<Hologram> getHologram(String name) {
+        checkNotNull(name, "The variable 'name' in SimpleHologramManager#getHologram cannot be null.");
 
-        this.holograms.remove(hologramID);
-        this.hologramStore.saveHolograms(this.holograms.values());
+        return this.holograms.values().stream().filter(hologram -> hologram.getName().equalsIgnoreCase(name)).findFirst();
     }
 
     @Override
-    public boolean isExistent(String hologramID) {
-        return this.holograms.containsKey(hologramID);
+    public void removeHologram(UUID uuid) {
+        checkNotNull(uuid, "The variable 'uuid' in SimpleHologramManager#removeHologram cannot be null.");
+
+        this.holograms.remove(uuid);
     }
+
+    @Override
+    public void load(HologramStore store) {
+        store.loadHolograms().forEach(hologram -> {
+            this.holograms.put(hologram.getUniqueId(), hologram);
+
+            if (!hologram.isDisabled()) {
+                hologram.spawnAssociatedEntities();
+            }
+        });
+    }
+
+    @Override
+    public void save(HologramStore store) {
+        store.saveHolograms(this.getHolograms());
+    }
+
 }

@@ -1,13 +1,13 @@
-package net.felixoi.felograms.hologram.creation;
+package net.felixoi.felograms.hologram.creation.processor;
 
 import net.felixoi.felograms.Felograms;
+import net.felixoi.felograms.api.text.TextImage;
 import net.felixoi.felograms.internal.command.Aliases;
-import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramCreationProcessor;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
+import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
 import net.felixoi.felograms.internal.message.Message;
 import net.felixoi.felograms.internal.message.MessageTypes;
 import net.felixoi.felograms.internal.message.MultiMessage;
-import net.felixoi.felograms.api.text.TextImage;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class AddImageHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
-    public Optional<Hologram.Builder> process(Hologram.Builder builder, Player player, String arguments) {
+    public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
         String[] args = arguments.split(" ");
 
         if (args.length != 2) {
@@ -60,7 +60,7 @@ public class AddImageHologramCreationProcessor extends HologramCreationProcessor
         try {
             String fileType = Files.probeContentType(file);
 
-            if(fileType.equals("image/png") || fileType.equals("image/jpeg")) {
+            if (fileType.equals("image/png") || fileType.equals("image/jpeg")) {
                 BufferedImage image = ImageIO.read(file.toFile());
                 Text[] lines = TextImage.of(image, height).toText();
 
