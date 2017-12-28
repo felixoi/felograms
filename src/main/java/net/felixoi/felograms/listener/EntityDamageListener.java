@@ -7,7 +7,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 
-public class EntityDamageListener {
+public final class EntityDamageListener {
 
     @Listener
     public void onDamage(DamageEntityEvent event, @Getter("getTargetEntity") Entity entity) {

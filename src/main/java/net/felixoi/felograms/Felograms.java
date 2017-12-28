@@ -40,7 +40,7 @@ import java.nio.file.Path;
                 "felixoi"
         }
 )
-public class Felograms {
+public final class Felograms {
 
     private static Felograms INSTANCE;
 

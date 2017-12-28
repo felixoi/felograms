@@ -12,7 +12,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import java.util.Optional;
 
 @Aliases({"add", "addline"})
-public class AddLineHologramCreationProcessor extends HologramCreationProcessor {
+public final class AddLineHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

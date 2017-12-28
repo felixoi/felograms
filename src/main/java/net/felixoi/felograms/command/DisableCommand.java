@@ -15,7 +15,7 @@ import org.spongepowered.api.text.Text;
 
 @Aliases("disable")
 @Permission("felograms.disable")
-public class DisableCommand extends Command {
+public final class DisableCommand extends Command {
 
     public DisableCommand() {
         super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramID"))));

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SimpleHologramService implements HologramService {
+public final class SimpleHologramService implements HologramService {
 
     @Override
     public List<Hologram> getHolograms() {

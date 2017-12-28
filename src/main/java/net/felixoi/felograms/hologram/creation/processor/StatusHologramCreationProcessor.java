@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Aliases({"status", "current"})
-public class StatusHologramCreationProcessor extends HologramCreationProcessor {
+public final class StatusHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

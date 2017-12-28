@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Aliases({"modify", "reword", "edit"})
-public class ModifyHologramCreationProcessor extends HologramCreationProcessor {
+public final class ModifyHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

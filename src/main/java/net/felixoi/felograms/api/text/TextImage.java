@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A {@link TextElement} to represent images using a {@link Text}
  */
-public class TextImage implements TextElement {
+public final class TextImage implements TextElement {
 
     private final static char TRANSPARENT_CHAR = ' ';
     private final static char NORMAL_CHAR = '\u2592';

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class HologramCommandElement extends CommandElement {
+public final class HologramCommandElement extends CommandElement {
 
     public HologramCommandElement(Text key) {
         super(key);

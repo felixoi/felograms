@@ -11,7 +11,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import java.util.Optional;
 
 @Aliases({"exit", "cancel", "quit"})
-public class ExitHologramCreationProcessor extends HologramCreationProcessor {
+public final class ExitHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SimpleHologram implements Hologram {
+public final class SimpleHologram implements Hologram {
 
     private static double SPACE_BETWEEN_LINES = 0.25;
 

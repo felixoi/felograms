@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class FileConfigurationHologramStore extends HologramStore {
+public final class FileConfigurationHologramStore extends HologramStore {
 
     private final Configuration configuration;
 

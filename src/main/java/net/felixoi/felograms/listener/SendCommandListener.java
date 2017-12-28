@@ -12,7 +12,7 @@ import org.spongepowered.api.event.filter.cause.First;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SendCommandListener {
+public final class SendCommandListener {
 
     @Listener
     public void onCommand(SendCommandEvent event, @First Player player) {

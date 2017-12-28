@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 @Aliases({"image", "img"})
-public class AddImageHologramCreationProcessor extends HologramCreationProcessor {
+public final class AddImageHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

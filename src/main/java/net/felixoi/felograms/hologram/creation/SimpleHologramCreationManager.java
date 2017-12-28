@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SimpleHologramCreationManager implements HologramCreationManager {
+public final class SimpleHologramCreationManager implements HologramCreationManager {
 
     private HologramStore hologramStore;
     private Map<UUID, HologramCreationBuilder> creations;

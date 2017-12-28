@@ -17,7 +17,7 @@ import org.spongepowered.api.text.Text;
 @Aliases("create")
 @Permission("felograms.create")
 @AcceptedSources(Player.class)
-public class CreateCommand extends Command {
+public final class CreateCommand extends Command {
 
     public CreateCommand() {
         super(GenericArguments.onlyOne(GenericArguments.string(Text.of("hologramID"))));

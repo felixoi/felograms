@@ -13,7 +13,7 @@ import net.felixoi.felograms.internal.hologram.creation.HologramCreationManager;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class HologramCreationProcessorRegistry {
+public final class HologramCreationProcessorRegistry {
 
     public static void registerProcessors(HologramCreationManager creationManager) {
         checkNotNull(creationManager, "The variable 'creationManager' in HologramCreationProcessorRegistry#registerProcessors(creationManager) cannot be null.");

@@ -17,7 +17,7 @@ import org.spongepowered.api.world.World;
 
 import java.util.UUID;
 
-public class ConfigurationUtil {
+public final class ConfigurationUtil {
 
     public static TypeSerializerCollection getStandardSerializers() {
         return TypeSerializers.getDefaultSerializers().newChild()

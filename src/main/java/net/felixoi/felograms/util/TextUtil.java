@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TextUtil {
+public final class TextUtil {
 
     public static Text listToText(List<Text> list) {
         checkNotNull(list, "The variable 'list' in TextUtil#listToText(list) cannot be null.");

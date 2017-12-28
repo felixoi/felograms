@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Aliases({"insert", "ins"})
-public class InsertHologramCreationProcessor extends HologramCreationProcessor {
+public final class InsertHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

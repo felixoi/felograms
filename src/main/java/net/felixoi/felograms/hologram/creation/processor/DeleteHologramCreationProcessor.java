@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Aliases({"delete", "del", "removeAssociatedEntities", "rm"})
-public class DeleteHologramCreationProcessor extends HologramCreationProcessor {
+public final class DeleteHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

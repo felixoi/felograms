@@ -16,7 +16,7 @@ import org.spongepowered.api.text.Text;
 
 @Aliases({"remove", "delete"})
 @Permission("felograms.remove")
-public class RemoveCommand extends Command {
+public final class RemoveCommand extends Command {
 
     public RemoveCommand() {
         super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramID"))));

@@ -13,7 +13,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import java.util.Optional;
 
 @Aliases({"finish", "create"})
-public class FinishHologramCreationProcessor extends HologramCreationProcessor {
+public final class FinishHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {

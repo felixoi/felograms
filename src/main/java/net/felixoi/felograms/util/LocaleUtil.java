@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class LocaleUtil {
+public final class LocaleUtil {
 
     private static ResourceBundle bundle;
 

@@ -10,7 +10,7 @@ import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.world.World;
 
-public class HologramEntityListeners {
+public final class HologramEntityListeners {
 
     @Listener(order = Order.LATE)
     public void onStarting(GameStartingServerEvent event) {

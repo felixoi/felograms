@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector3i;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class LocationUtil {
+public final class LocationUtil {
 
     public static Vector3d getBlockMiddle(Vector3i blockPosition) {
         checkNotNull(blockPosition, "The location object in LocationUtil#getBlockMiddle(Location<World>) cannot be null.");

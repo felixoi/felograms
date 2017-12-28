@@ -12,7 +12,7 @@ import org.spongepowered.api.text.Text;
 @Aliases({"felograms", "felogram", "felo", "holograms", "hologram", "holo"})
 @Permission("felograms.info")
 @Children({CreateCommand.class, DisableCommand.class, EnableCommand.class, RemoveCommand.class})
-public class FelogramsCommand extends Command {
+public final class FelogramsCommand extends Command {
 
     @Override
     public CommandResult process(CommandSource source, CommandContext args) {

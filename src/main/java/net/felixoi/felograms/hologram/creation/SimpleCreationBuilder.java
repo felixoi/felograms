@@ -13,7 +13,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-public class SimpleCreationBuilder implements HologramCreationBuilder {
+public final class SimpleCreationBuilder implements HologramCreationBuilder {
 
     private String name;
     private List<Text> lines;

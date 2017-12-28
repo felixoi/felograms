@@ -9,7 +9,7 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 
 import java.util.UUID;
 
-public class ChatListener {
+public final class ChatListener {
 
     @Listener
     public void onChat(MessageChannelEvent.Chat event, @First Player player) {
