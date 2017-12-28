@@ -3,12 +3,11 @@ package net.felixoi.felograms.hologram;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.data.FelogramsKeys;
-import net.felixoi.felograms.api.data.HologramData;
-import net.felixoi.felograms.api.data.ImmutableHologramData;
+import net.felixoi.felograms.api.data.FelogramKeys;
 import net.felixoi.felograms.api.exception.WorldNotFoundException;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.data.HologramData;
+import net.felixoi.felograms.data.ImmutableHologramData;
 import net.felixoi.felograms.util.LocationUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -31,8 +30,6 @@ public class SimpleHologram implements Hologram {
 
     private static double SPACE_BETWEEN_LINES = 0.25;
 
-    private HologramManager hologramManager;
-
     private UUID uuid;
     private String name;
     private List<Text> lines;
@@ -42,10 +39,9 @@ public class SimpleHologram implements Hologram {
     private List<UUID> entities;
     private boolean removed;
 
-    public SimpleHologram(HologramManager hologramManager, UUID uuid, String name, List<Text> lines, UUID worldUUID, Vector3i position, boolean disabled) {
+    public SimpleHologram(UUID uuid, String name, List<Text> lines, UUID worldUUID, Vector3i position, boolean disabled, boolean save) {
         checkNotNull(position, "The variable 'position' in SimpleHologram#SimpleHologram cannot be null.");
 
-        this.hologramManager = checkNotNull(hologramManager, "The variable 'hologramManager' in SimpleHologram#SimpleHologram cannot be null.");
         this.worldUUID = checkNotNull(worldUUID, "The variable 'worldUUID' in SimpleHologram#SimpleHologram cannot be null.");
         this.lines = checkNotNull(lines, "The variable 'lines' in SimpleHologram#SimpleHologram cannot be null.");
         this.uuid = checkNotNull(uuid, "The variable 'uuid' in SimpleHologram#SimpleHologram cannot be null.");
@@ -55,19 +51,24 @@ public class SimpleHologram implements Hologram {
         this.removed = false;
         this.entities = new ArrayList<>();
         this.name = name != null ? name : this.uuid.toString();
-        this.hologramManager.addHologram(this);
+
+        Felograms.getInstance().getHologramStore().add(this, save);
     }
 
-    public SimpleHologram(HologramManager hologramManager, String name, List<Text> lines, UUID worldUUID, Vector3i position) {
-        this(hologramManager, UUID.randomUUID(), name, lines, worldUUID, position, true);
+    public SimpleHologram(UUID uuid, String name, List<Text> lines, UUID worldUUID, Vector3i position, boolean disabled) {
+        this(uuid, name, lines, worldUUID, position, disabled, true);
     }
 
-    public SimpleHologram(HologramManager hologramManager, String name, List<Text> lines, Location<World> location) {
-        this(hologramManager, name, lines, location.getExtent().getUniqueId(), location.getBlockPosition());
+    public SimpleHologram(String name, List<Text> lines, UUID worldUUID, Vector3i position) {
+        this(UUID.randomUUID(), name, lines, worldUUID, position, true);
     }
 
-    public SimpleHologram(HologramManager hologramManager, List<Text> lines, Location<World> location) {
-        this(hologramManager, null, lines, location);
+    public SimpleHologram(String name, List<Text> lines, Location<World> location) {
+        this(name, lines, location.getExtent().getUniqueId(), location.getBlockPosition());
+    }
+
+    public SimpleHologram(List<Text> lines, Location<World> location) {
+        this(null, lines, location.getExtent().getUniqueId(), location.getBlockPosition());
     }
 
     @Override
@@ -78,6 +79,8 @@ public class SimpleHologram implements Hologram {
     @Override
     public void setName(String name) {
         this.name = checkNotNull(name, "The variable 'name' in SimpleHologram#setName cannot be null.");
+
+        Felograms.getInstance().getHologramStore().update(this);
     }
 
     @Override
@@ -88,6 +91,8 @@ public class SimpleHologram implements Hologram {
     @Override
     public void setLines(List<Text> lines) {
         this.lines = checkNotNull(lines, "The variable 'lines' in SimpleHologram#setLines cannot be null.");
+
+        Felograms.getInstance().getHologramStore().update(this);
     }
 
     @Override
@@ -110,6 +115,8 @@ public class SimpleHologram implements Hologram {
         this.position = location.getPosition();
 
         this.spawnAssociatedEntities();
+
+        Felograms.getInstance().getHologramStore().update(this);
     }
 
     @Override
@@ -121,10 +128,8 @@ public class SimpleHologram implements Hologram {
     public void setDisabled(boolean disabled) {
         if (disabled) {
             this.removeAssociatedEntities();
-            this.disabled = true;
         } else {
             this.spawnAssociatedEntities();
-            this.disabled = false;
         }
     }
 
@@ -139,7 +144,7 @@ public class SimpleHologram implements Hologram {
             this.setDisabled(true);
         }
 
-        this.hologramManager.removeHologram(this.uuid);
+        Felograms.getInstance().getHologramStore().remove(this.getUniqueId());
     }
 
     @Override
@@ -175,7 +180,7 @@ public class SimpleHologram implements Hologram {
                     // offer custom data to identify hologram entities
 
                     HologramData hologramData = hologramDataBuilder.get().create();
-                    hologramData.set(FelogramsKeys.IS_HOLOGRAM, true);
+                    hologramData.set(FelogramKeys.IS_HOLOGRAM, true);
                     armorStand.offer(hologramData);
 
                     this.entities.add(armorStand.getUniqueId());
@@ -183,6 +188,8 @@ public class SimpleHologram implements Hologram {
                 }
 
                 this.disabled = false;
+
+                Felograms.getInstance().getHologramStore().update(this);
             } else {
                 throw new WorldNotFoundException(this.worldUUID.toString());
             }
@@ -211,6 +218,8 @@ public class SimpleHologram implements Hologram {
             }
 
             this.disabled = true;
+
+            Felograms.getInstance().getHologramStore().update(this);
         } else {
             throw new WorldNotFoundException(this.worldUUID.toString());
         }

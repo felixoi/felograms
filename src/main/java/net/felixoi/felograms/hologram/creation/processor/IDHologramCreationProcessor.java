@@ -21,7 +21,7 @@ public class IDHologramCreationProcessor extends HologramCreationProcessor {
         if (args.length == 1) {
             String hologramID = args[0];
 
-            if (Felograms.getInstance().getHologramManager().getHolograms().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramID))) {
+            if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramID))) {
                 Message.ofLocalized(MessageTypes.ERROR, "hologram.id_exists", hologramID).sendTo(player);
             } else {
                 if (builder.getName().equalsIgnoreCase(hologramID)) {

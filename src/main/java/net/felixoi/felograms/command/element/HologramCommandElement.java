@@ -24,7 +24,7 @@ public class HologramCommandElement extends CommandElement {
     protected Object parseValue(CommandSource source, CommandArgs args) throws ArgumentParseException {
         String hologramID = args.next();
 
-        Optional<Hologram> hologram = Felograms.getInstance().getHologramManager().getHologram(hologramID);
+        Optional<Hologram> hologram = Felograms.getInstance().getHologramStore().get(hologramID);
         if (hologram.isPresent()) {
             return hologram.get();
         } else {
@@ -34,7 +34,7 @@ public class HologramCommandElement extends CommandElement {
 
     @Override
     public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
-        List<String> choices = Felograms.getInstance().getHologramManager().getHolograms().stream().map(Hologram::getName).collect(Collectors.toList());
+        List<String> choices = Felograms.getInstance().getHologramStore().getAll().stream().map(Hologram::getName).collect(Collectors.toList());
 
         final Optional<String> nextArg = args.nextIfPresent();
         if (nextArg.isPresent()) {

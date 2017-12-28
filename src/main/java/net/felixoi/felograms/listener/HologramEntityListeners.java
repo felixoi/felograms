@@ -1,7 +1,7 @@
 package net.felixoi.felograms.listener;
 
 import net.felixoi.felograms.Felograms;
-import net.felixoi.felograms.api.data.FelogramsKeys;
+import net.felixoi.felograms.api.data.FelogramKeys;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.event.Listener;
@@ -16,7 +16,7 @@ public class HologramEntityListeners {
     public void onStarting(GameStartingServerEvent event) {
         Sponge.getServer().getWorlds().forEach(this::removeHologramEntities);
 
-        Felograms.getInstance().getHologramManager().getHolograms().forEach(hologram -> {
+        Felograms.getInstance().getHologramStore().getAll().forEach(hologram -> {
             if (!hologram.isDisabled()) {
                 hologram.spawnAssociatedEntities();
             }
@@ -30,7 +30,8 @@ public class HologramEntityListeners {
 
     private void removeHologramEntities(World world) {
         world.getEntities().forEach(entity -> {
-            if (entity.getType().equals(EntityTypes.ARMOR_STAND) && entity.get(FelogramsKeys.IS_HOLOGRAM).isPresent()) {
+            if (entity.getType().equals(EntityTypes.ARMOR_STAND) && entity.get(FelogramKeys.IS_HOLOGRAM).isPresent()) {
+                System.out.println("removed entity: " + entity.getUniqueId().toString());
                 entity.remove();
             }
         });

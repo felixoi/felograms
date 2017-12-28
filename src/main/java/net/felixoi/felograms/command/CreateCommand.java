@@ -28,7 +28,7 @@ public class CreateCommand extends Command {
         Player player = (Player) source;
         String hologramID = args.<String>getOne("hologramID").get();
 
-        if (Felograms.getInstance().getHologramManager().getHolograms().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramID))) {
+        if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramID))) {
             Message.ofLocalized(MessageTypes.ERROR, "hologram.id_exists", hologramID).sendTo(player);
         } else {
             if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {

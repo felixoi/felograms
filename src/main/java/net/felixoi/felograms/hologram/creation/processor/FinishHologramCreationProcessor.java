@@ -17,7 +17,7 @@ public class FinishHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
-        if (Felograms.getInstance().getHologramManager().getHolograms().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(builder.getName()))) {
+        if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(builder.getName()))) {
             MultiMessage.builder()
                     .localizedMessage(MessageTypes.ERROR, "creation.id.exists")
                     .localizedMessage(MessageTypes.INFO, "creation.id.usage")

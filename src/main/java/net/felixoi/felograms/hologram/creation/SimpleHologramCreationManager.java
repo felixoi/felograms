@@ -1,6 +1,6 @@
 package net.felixoi.felograms.hologram.creation;
 
-import net.felixoi.felograms.internal.hologram.HologramManager;
+import net.felixoi.felograms.internal.hologram.HologramStore;
 import net.felixoi.felograms.internal.hologram.creation.HologramCreationBuilder;
 import net.felixoi.felograms.internal.hologram.creation.HologramCreationManager;
 import net.felixoi.felograms.internal.hologram.creation.HologramCreationProcessor;
@@ -18,12 +18,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SimpleHologramCreationManager implements HologramCreationManager {
 
-    private HologramManager hologramManager;
+    private HologramStore hologramStore;
     private Map<UUID, HologramCreationBuilder> creations;
     private List<HologramCreationProcessor> processors;
 
-    public SimpleHologramCreationManager(HologramManager hologramManager) {
-        this.hologramManager = checkNotNull(hologramManager, "The variable 'hologramManager' in SimpleHologramCreationManager#SimpleHologramCreationManager cannot be null.");
+    public SimpleHologramCreationManager(HologramStore hologramStore) {
+        this.hologramStore = checkNotNull(hologramStore, "The variable 'hologramStore' in SimpleHologramCreationManager#SimpleHologramCreationManager cannot be null.");
         this.creations = new HashMap<>();
         this.processors = new ArrayList<>();
     }
@@ -50,7 +50,7 @@ public class SimpleHologramCreationManager implements HologramCreationManager {
         checkNotNull(uuid, "The variable 'uuid' in SimpleHologramCreationManager#startCreation(uuid) cannot be null.");
         checkNotNull(hologramID, "The variable 'hologramID' in SimpleHologramCreationManager#startCreation(uuid, hologramID) cannot be null.");
 
-        this.creations.put(uuid, new SimpleCreationBuilder(this.hologramManager, hologramID));
+        this.creations.put(uuid, new SimpleCreationBuilder(hologramID));
     }
 
     @Override

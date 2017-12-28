@@ -18,25 +18,25 @@ public class SimpleHologramService implements HologramService {
     public List<Hologram> getHolograms() {
         this.checkAvailability();
 
-        return new ArrayList<>(Felograms.getInstance().getHologramManager().getHolograms());
+        return new ArrayList<>(Felograms.getInstance().getHologramStore().getAll());
     }
 
     @Override
     public Optional<Hologram> getHologram(UUID uuid) {
         this.checkAvailability();
 
-        return Felograms.getInstance().getHologramManager().getHologram(uuid);
+        return Felograms.getInstance().getHologramStore().get(uuid);
     }
 
     @Override
     public Hologram createHologram(List<Text> lines, Location<World> location) {
         this.checkAvailability();
 
-        return new SimpleHologram(Felograms.getInstance().getHologramManager(), lines, location);
+        return new SimpleHologram(lines, location);
     }
 
     private void checkAvailability() {
-        if (Felograms.getInstance().getHologramManager() == null) {
+        if (Felograms.getInstance().getHologramStore() == null) {
             throw new NullPointerException("Sorry! HologramService is not fully operational before GameStartingServerEvent!");
         }
     }
