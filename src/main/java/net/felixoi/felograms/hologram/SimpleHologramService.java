@@ -29,6 +29,13 @@ public final class SimpleHologramService implements HologramService {
     }
 
     @Override
+    public Optional<Hologram> getHologram(String name) {
+        this.checkAvailability();
+
+        return Felograms.getInstance().getHologramStore().get(name);
+    }
+
+    @Override
     public Hologram createHologram(List<Text> lines, Location<World> location) {
         this.checkAvailability();
 

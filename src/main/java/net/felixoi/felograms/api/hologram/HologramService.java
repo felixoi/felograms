@@ -29,6 +29,14 @@ public interface HologramService {
     Optional<Hologram> getHologram(UUID uuid);
 
     /**
+     * Gets a specific hologram by its unique name
+     *
+     * @param name the name
+     * @return The hologram, if it exists
+     */
+    Optional<Hologram> getHologram(String name);
+
+    /**
      * Creates a new hologram and returns it.
      *
      * @param lines    the lines

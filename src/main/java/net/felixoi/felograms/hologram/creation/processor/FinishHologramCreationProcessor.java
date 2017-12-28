@@ -19,8 +19,8 @@ public final class FinishHologramCreationProcessor extends HologramCreationProce
     public Optional<HologramCreationBuilder> process(HologramCreationBuilder builder, Player player, String arguments) {
         if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(builder.getName()))) {
             MultiMessage.builder()
-                    .localizedMessage(MessageTypes.ERROR, "creation.id.exists")
-                    .localizedMessage(MessageTypes.INFO, "creation.id.usage")
+                    .localizedMessage(MessageTypes.ERROR, "creation.name.exists")
+                    .localizedMessage(MessageTypes.INFO, "creation.name.usage")
                     .sendTo(player)
                     .buildAndSend();
 

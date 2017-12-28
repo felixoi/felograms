@@ -20,22 +20,22 @@ import org.spongepowered.api.text.Text;
 public final class CreateCommand extends Command {
 
     public CreateCommand() {
-        super(GenericArguments.onlyOne(GenericArguments.string(Text.of("hologramID"))));
+        super(GenericArguments.onlyOne(GenericArguments.string(Text.of("hologramName"))));
     }
 
     @Override
     public CommandResult process(CommandSource source, CommandContext args) {
         Player player = (Player) source;
-        String hologramID = args.<String>getOne("hologramID").get();
+        String hologramName = args.<String>getOne("hologramName").get();
 
-        if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramID))) {
-            Message.ofLocalized(MessageTypes.ERROR, "hologram.id_exists", hologramID).sendTo(player);
+        if (Felograms.getInstance().getHologramStore().getAll().stream().anyMatch(hologram -> hologram.getName().equalsIgnoreCase(hologramName))) {
+            Message.ofLocalized(MessageTypes.ERROR, "hologram.name_exists", hologramName).sendTo(player);
         } else {
             if (Felograms.getInstance().getHologramCreationManager().getCreators().contains(player.getUniqueId())) {
                 Message.ofLocalized(MessageTypes.ERROR, "creation.start.already").sendTo(player);
             } else {
-                Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramID);
-                Message.ofLocalized(MessageTypes.SUCCESS, "creation.start.success", hologramID).sendTo(player);
+                Felograms.getInstance().getHologramCreationManager().startCreation(player.getUniqueId(), hologramName);
+                Message.ofLocalized(MessageTypes.SUCCESS, "creation.start.success", hologramName).sendTo(player);
             }
         }
 

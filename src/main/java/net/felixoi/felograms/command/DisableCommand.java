@@ -18,12 +18,12 @@ import org.spongepowered.api.text.Text;
 public final class DisableCommand extends Command {
 
     public DisableCommand() {
-        super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramID"))));
+        super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramName"))));
     }
 
     @Override
     public CommandResult process(CommandSource source, CommandContext args) {
-        Hologram hologram = args.<Hologram>getOne("hologramID").get();
+        Hologram hologram = args.<Hologram>getOne("hologramName").get();
 
         if (hologram.isDisabled()) {
             Message.ofLocalized(MessageTypes.WARNING, "hologram.disabled.already", hologram.getName()).sendTo(source);

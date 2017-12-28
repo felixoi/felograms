@@ -12,7 +12,7 @@ import org.spongepowered.api.text.Text;
 import java.util.List;
 import java.util.Optional;
 
-@Aliases({"delete", "del", "removeAssociatedEntities", "rm"})
+@Aliases({"delete", "del", "remove", "rm"})
 public final class DeleteHologramCreationProcessor extends HologramCreationProcessor {
 
     @Override
@@ -23,13 +23,21 @@ public final class DeleteHologramCreationProcessor extends HologramCreationProce
             try {
                 int lineNumber = Integer.valueOf(args[0]);
 
-                List<Text> lines = builder.getLines();
-                lines.remove(lineNumber - 1);
+                if(lineNumber <= builder.getLines().size()) {
+                    List<Text> lines = builder.getLines();
+                    lines.remove(lineNumber - 1);
 
-                builder.setLines(lines);
-                Message.ofLocalized(MessageTypes.SUCCESS, "creation.delete.success");
+                    builder.setLines(lines);
+                    Message.ofLocalized(MessageTypes.SUCCESS, "creation.delete.success").sendTo(player);
 
-                return Optional.of(builder);
+                    return Optional.of(builder);
+                } else {
+                    MultiMessage.builder()
+                            .localizedMessage(MessageTypes.ERROR, "creation.delete.bounds", lineNumber, builder.getLines().size())
+                            .localizedMessage(MessageTypes.INFO, "creation.status.usage")
+                            .sendTo(player)
+                            .buildAndSend();
+                }
             } catch (NumberFormatException e) {
                 MultiMessage.builder()
                         .localizedMessage(MessageTypes.ERROR, "command.arguments.expected_integer", args[0])

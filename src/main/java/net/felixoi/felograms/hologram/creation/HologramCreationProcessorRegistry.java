@@ -5,7 +5,7 @@ import net.felixoi.felograms.hologram.creation.processor.AddLineHologramCreation
 import net.felixoi.felograms.hologram.creation.processor.DeleteHologramCreationProcessor;
 import net.felixoi.felograms.hologram.creation.processor.ExitHologramCreationProcessor;
 import net.felixoi.felograms.hologram.creation.processor.FinishHologramCreationProcessor;
-import net.felixoi.felograms.hologram.creation.processor.IDHologramCreationProcessor;
+import net.felixoi.felograms.hologram.creation.processor.NameHologramCreationProcessor;
 import net.felixoi.felograms.hologram.creation.processor.InsertHologramCreationProcessor;
 import net.felixoi.felograms.hologram.creation.processor.ModifyHologramCreationProcessor;
 import net.felixoi.felograms.hologram.creation.processor.StatusHologramCreationProcessor;
@@ -23,7 +23,7 @@ public final class HologramCreationProcessorRegistry {
         creationManager.registerProcessor(new ExitHologramCreationProcessor());
         creationManager.registerProcessor(new FinishHologramCreationProcessor());
         creationManager.registerProcessor(new StatusHologramCreationProcessor());
-        creationManager.registerProcessor(new IDHologramCreationProcessor());
+        creationManager.registerProcessor(new NameHologramCreationProcessor());
         creationManager.registerProcessor(new DeleteHologramCreationProcessor());
         creationManager.registerProcessor(new InsertHologramCreationProcessor());
         creationManager.registerProcessor(new ModifyHologramCreationProcessor());

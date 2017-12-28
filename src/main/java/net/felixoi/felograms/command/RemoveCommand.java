@@ -1,6 +1,5 @@
 package net.felixoi.felograms.command;
 
-import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.hologram.Hologram;
 import net.felixoi.felograms.command.element.HologramCommandElement;
 import net.felixoi.felograms.internal.command.Aliases;
@@ -19,15 +18,14 @@ import org.spongepowered.api.text.Text;
 public final class RemoveCommand extends Command {
 
     public RemoveCommand() {
-        super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramID"))));
+        super(GenericArguments.onlyOne(new HologramCommandElement(Text.of("hologramName"))));
     }
 
     @Override
     public CommandResult process(CommandSource source, CommandContext args) {
-        Hologram hologram = args.<Hologram>getOne("hologramID").get();
+        Hologram hologram = args.<Hologram>getOne("hologramName").get();
 
-        hologram.removeAssociatedEntities();
-        Felograms.getInstance().getHologramStore().remove(hologram.getWorldUniqueID());
+        hologram.remove();
         Message.ofLocalized(MessageTypes.SUCCESS, "hologram.removed", hologram.getName()).sendTo(source);
 
         return CommandResult.success();
