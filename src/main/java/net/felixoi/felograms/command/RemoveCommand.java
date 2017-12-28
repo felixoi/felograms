@@ -14,8 +14,8 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.text.Text;
 
-@Aliases({"removeAssociatedEntities", "delete"})
-@Permission("felograms.removeAssociatedEntities")
+@Aliases({"remove", "delete"})
+@Permission("felograms.remove")
 public class RemoveCommand extends Command {
 
     public RemoveCommand() {
