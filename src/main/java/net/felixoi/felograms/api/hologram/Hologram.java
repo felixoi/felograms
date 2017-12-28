@@ -23,7 +23,8 @@ public interface Hologram extends Identifiable, EntityRepresentable {
      * Gets an human-readable name for this hologram if set.
      * <p>
      * <p>
-     * If no name is set the uuid will be returned.
+     *     The hologram name should be unique,
+     *     if no name is set the uuid will be returned.
      * </p>
      *
      * @return the name if present, otherwise the uuid
