@@ -28,8 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class SimpleHologram implements Hologram {
 
-    private static double SPACE_BETWEEN_LINES = 0.25;
-
     private UUID uuid;
     private String name;
     private List<Text> lines;
@@ -166,7 +164,9 @@ public final class SimpleHologram implements Hologram {
                 for (int index = 0; index < this.lines.size(); index++) {
                     Text currentLine = this.lines.get(index);
 
-                    double y = this.lines.size() * SPACE_BETWEEN_LINES - index * SPACE_BETWEEN_LINES - 0.5;
+                    double space = Felograms.getInstance().getConfiguration().getSpaceBetweenLines();
+                    double y = this.lines.size() * space - index * space - 0.5;
+
                     Entity armorStand = location.getExtent().createEntity(EntityTypes.ARMOR_STAND,
                             this.position.add(0, y, 0));
 

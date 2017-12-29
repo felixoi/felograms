@@ -12,7 +12,19 @@ public final class LocaleUtil {
     public static void initialize(String language) {
         checkNotNull(language, "The variable 'language' in LocaleUtil#initialize(language) cannot be null.");
 
-        Locale.setDefault(new Locale(language));//todo
+        Locale locale;
+
+        switch (language) {
+            case "de":
+                locale = Locale.GERMAN;
+                break;
+            case "en":
+            default:
+                locale = Locale.ENGLISH;
+        }
+
+        Locale.setDefault(locale);
+
         bundle = ResourceBundle.getBundle("assets.felograms.messages");
     }
 

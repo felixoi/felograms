@@ -31,7 +31,6 @@ public final class HologramEntityListeners {
     private void removeHologramEntities(World world) {
         world.getEntities().forEach(entity -> {
             if (entity.getType().equals(EntityTypes.ARMOR_STAND) && entity.get(FelogramKeys.IS_HOLOGRAM).isPresent()) {
-                System.out.println("removed entity: " + entity.getUniqueId().toString());
                 entity.remove();
             }
         });

@@ -1,6 +1,8 @@
 package net.felixoi.felograms.internal.configuration;
 
+import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.objectmapping.ObjectMapperFactory;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollection;
 import org.spongepowered.api.util.ResettableBuilder;
 
@@ -10,7 +12,8 @@ public interface Configuration {
 
     Path getPath();
 
-    TypeSerializerCollection getSerializers();
+    ConfigurationOptions getConfigurationOptions();
+
 
     CommentedConfigurationNode getRoot();
 
@@ -20,7 +23,7 @@ public interface Configuration {
 
         Builder setPath(Path path);
 
-        Builder setSerializerCollection(TypeSerializerCollection typeSerializerCollection);
+        Builder setOptions(ConfigurationOptions options);
 
         Configuration build();
 

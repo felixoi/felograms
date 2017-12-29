@@ -4,7 +4,6 @@ import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollection;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,22 +16,20 @@ public class SimpleConfiguration implements Configuration {
     private final Path path;
     private final ConfigurationLoader<CommentedConfigurationNode> loader;
     private CommentedConfigurationNode rootNode;
-    private TypeSerializerCollection typeSerializerCollection;
+    private ConfigurationOptions options;
 
-    private SimpleConfiguration(Path path, TypeSerializerCollection typeSerializerCollection) {
-        this.path = checkNotNull(path, "The variable 'path' in SimpleConfiguration#SimpleConfiguration(path, typeSerializerCollection) cannot be null.");
-        this.typeSerializerCollection = checkNotNull(typeSerializerCollection, "The variable 'typeSerializerCollection' in SimpleConfiguration#SimpleConfiguration(path, typeSerializerCollection) cannot be null.");
+    private SimpleConfiguration(Path path, ConfigurationOptions options) {
+        this.path = checkNotNull(path, "The variable 'path' in SimpleConfiguration#SimpleConfiguration cannot be null.");
+        this.options = checkNotNull(options, "The variable 'options' in SimpleConfiguration#SimpleConfiguration cannot be null.");
 
         this.createFile();
-
-        ConfigurationOptions options = ConfigurationOptions.defaults().setSerializers(this.typeSerializerCollection);
 
         this.loader = HoconConfigurationLoader.builder().setPath(this.path).build();
 
         try {
-            this.rootNode = this.loader.load(options);
+            this.rootNode = this.loader.load(this.options);
         } catch (IOException e) {
-            this.rootNode = this.loader.createEmptyNode(options);
+            this.rootNode = this.loader.createEmptyNode(this.options);
         }
 
         this.save();
@@ -59,8 +56,8 @@ public class SimpleConfiguration implements Configuration {
     }
 
     @Override
-    public TypeSerializerCollection getSerializers() {
-        return this.typeSerializerCollection;
+    public ConfigurationOptions getConfigurationOptions() {
+        return this.options;
     }
 
     @Override
@@ -77,41 +74,39 @@ public class SimpleConfiguration implements Configuration {
         }
     }
 
-    public static class Builder implements Configuration.Builder {
+    public static final class Builder implements Configuration.Builder {
 
         private Path path;
-        private TypeSerializerCollection serializers;
+        private ConfigurationOptions options;
 
         private Builder() {
+            this.reset();
         }
 
         @Override
         public Configuration.Builder setPath(Path path) {
-            this.path = checkNotNull(path, "The variable 'path' in Builder#setPath(path) cannot be null.");
+            this.path = checkNotNull(path, "The variable 'path' in Builder#setPath cannot be null.");
 
             return this;
         }
 
         @Override
-        public Configuration.Builder setSerializerCollection(TypeSerializerCollection typeSerializerCollection) {
-            this.serializers = checkNotNull(typeSerializerCollection, "The variable 'typeSerializerCollection' in Builder#setSerializerCollection(typeSerializerCollection) cannot be null.");
+        public Configuration.Builder setOptions(ConfigurationOptions options) {
+            this.options = checkNotNull(options, "The variable 'options' in Builder#setOptions cannot be null.");
 
             return this;
         }
-
 
         @Override
         public Configuration build() {
-            checkNotNull(this.path, "The variable 'path' in Builder#build() cannot be null.");
-            checkNotNull(this.serializers, "The variable 'this.serializers' in Builder#build() cannot be null.");
+            checkNotNull(this.path, "The variable 'path' in Builder#build cannot be null.");
 
-            return new SimpleConfiguration(this.path, this.serializers);
+            return new SimpleConfiguration(this.path, this.options);
         }
 
         @Override
         public Configuration.Builder from(Configuration configuration) {
             this.path = configuration.getPath();
-            this.serializers = configuration.getSerializers();
 
             return this;
         }
@@ -119,7 +114,7 @@ public class SimpleConfiguration implements Configuration {
         @Override
         public Configuration.Builder reset() {
             this.path = null;
-            this.serializers = null;
+            this.options = ConfigurationOptions.defaults();
 
             return this;
         }
