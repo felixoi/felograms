@@ -71,14 +71,16 @@ public final class AddImageHologramCreationProcessor extends HologramCreationPro
                 Message.ofLocalized(MessageTypes.SUCCESS, "creation.image.success").sendTo(player); //todo
 
                 return Optional.of(builder);
-            }
+            } else {
 
-            return Optional.empty();
+            }
         } catch (IOException e) {
             Message.ofLocalized(MessageTypes.ERROR, "creation.image.failed").sendTo(player);
 
             return Optional.empty();
         }
+
+        return Optional.empty();
     }
 
 }

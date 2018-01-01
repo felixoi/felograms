@@ -2,12 +2,15 @@ package net.felixoi.felograms;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
+import net.felixoi.felograms.api.data.FelogramKeys;
+import net.felixoi.felograms.api.data.HologramData;
+import net.felixoi.felograms.api.data.ImmutableHologramData;
 import net.felixoi.felograms.api.hologram.HologramService;
 import net.felixoi.felograms.command.FelogramsCommand;
 import net.felixoi.felograms.configuration.MainConfiguration;
-import net.felixoi.felograms.data.HologramData;
+import net.felixoi.felograms.data.FelogramsHologramData;
 import net.felixoi.felograms.data.HologramDataBuilder;
-import net.felixoi.felograms.data.ImmutableHologramData;
+import net.felixoi.felograms.data.ImmutableFelogramsHologramData;
 import net.felixoi.felograms.hologram.SimpleHologramService;
 import net.felixoi.felograms.hologram.creation.HologramCreationProcessorRegistry;
 import net.felixoi.felograms.hologram.creation.SimpleHologramCreationManager;
@@ -27,8 +30,10 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.DataRegistration;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -60,6 +65,24 @@ public final class Felograms {
     private Path picturesDirectory;
 
     @Listener
+    public void onKeyRegistration(GameRegistryEvent.Register<Key<?>> event) {
+        FelogramKeys.IS_HOLOGRAM.getQuery(); // Only to load the class..
+    }
+
+    @Listener
+    public void onDataRegistration(GameRegistryEvent.Register<DataRegistration<HologramData, ImmutableHologramData>> event) {
+        DataRegistration.builder()
+                .dataClass(HologramData.class)
+                .dataImplementation(FelogramsHologramData.class)
+                .immutableClass(ImmutableHologramData.class)
+                .immutableImplementation(ImmutableFelogramsHologramData.class)
+                .builder(new HologramDataBuilder())
+                .manipulatorId("hologram-data")
+                .dataName("Hologram Data")
+                .buildAndRegister(this.pluginContainer);
+    }
+
+    @Listener
     public void onInit(GameInitializationEvent event) {
 
         // Instance
@@ -81,15 +104,6 @@ public final class Felograms {
 
         // Language Settings and LocaleUtil
         LocaleUtil.initialize(this.configuration.getLocale());
-
-        // Data Registration
-        DataRegistration.builder()
-                .dataClass(HologramData.class)
-                .immutableClass(ImmutableHologramData.class)
-                .builder(new HologramDataBuilder())
-                .manipulatorId("hologram-data")
-                .dataName("Hologram Data")
-                .buildAndRegister(this.pluginContainer);
 
         // Listener Registration
         ListenerRegistry.registerListeners(this.pluginContainer);

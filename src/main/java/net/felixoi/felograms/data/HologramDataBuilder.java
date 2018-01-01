@@ -1,6 +1,8 @@
 package net.felixoi.felograms.data;
 
 import net.felixoi.felograms.api.data.FelogramKeys;
+import net.felixoi.felograms.api.data.HologramData;
+import net.felixoi.felograms.api.data.ImmutableHologramData;
 import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
@@ -16,8 +18,8 @@ public final class HologramDataBuilder extends AbstractDataBuilder<HologramData>
     }
 
     @Override
-    public HologramData create() {
-        return new HologramData();
+    public FelogramsHologramData create() {
+        return new FelogramsHologramData();
     }
 
     @Override

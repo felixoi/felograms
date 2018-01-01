@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class TextImage implements TextElement {
 
     private final static char TRANSPARENT_CHAR = ' ';
-    private final static char NORMAL_CHAR = '\u2592';
+    private final static char NORMAL_CHAR = '\u2588';
     private static final TextColor[] COLORS = {
             TextColors.BLACK, TextColors.DARK_BLUE, TextColors.DARK_GREEN, TextColors.DARK_AQUA, TextColors.RED, TextColors.DARK_PURPLE,
             TextColors.GOLD, TextColors.GRAY, TextColors.DARK_GRAY, TextColors.BLUE, TextColors.GREEN, TextColors.AQUA, TextColors.RED,
@@ -126,25 +126,15 @@ public final class TextImage implements TextElement {
         return operation.filter(this.image, null);
     }
 
-    /**
-     * //todo https://stackoverflow.com/questions/45821450/calculating-distance-between-two-lab-colors-java
-     *
-     * @param firstColor
-     * @param secondColor
-     * @return
-     */
     private double getDistanceBetweenColors(Color firstColor, Color secondColor) {
         checkNotNull(firstColor, "The variable 'firstColor' in TextImage#getDistanceBetweenColors cannot be null.");
         checkNotNull(secondColor, "The variable 'secondColor' in TextImage#getDistanceBetweenColors cannot be null.");
 
-        double rmean = (firstColor.getRed() + secondColor.getRed()) / 2.0;
-        double r = firstColor.getRed() - secondColor.getRed();
-        double g = firstColor.getGreen() - secondColor.getGreen();
-        int b = firstColor.getBlue() - secondColor.getBlue();
-        double weightR = 2 + rmean / 256.0;
-        double weightG = 4.0;
-        double weightB = 2 + (255 - rmean) / 256.0;
-        return weightR * r * r + weightG * g * g + weightB * b * b;
+        final int deltaR = firstColor.getRed() - secondColor.getRed();
+        final int deltaG = firstColor.getGreen() - secondColor.getGreen();
+        final int deltaB = firstColor.getBlue() - secondColor.getBlue();
+
+        return (deltaR * deltaR) + (deltaG * deltaG) + (deltaB * deltaB);
     }
 
     /**
@@ -183,8 +173,12 @@ public final class TextImage implements TextElement {
             }
         }
 
+        float[] hsv = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        hsv[2] = 0.5F;
+        Color c = new Color(Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
+
         for (int i = 0; i < COLORS.length; i++) {
-            double distance = getDistanceBetweenColors(color, COLORS[i].getColor().asJavaColor());
+            double distance = getDistanceBetweenColors(c, COLORS[i].getColor().asJavaColor());
             if (distance < best || best == -1) {
                 best = distance;
                 index = i;

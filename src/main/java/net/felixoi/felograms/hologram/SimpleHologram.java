@@ -4,10 +4,10 @@ import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import net.felixoi.felograms.Felograms;
 import net.felixoi.felograms.api.data.FelogramKeys;
+import net.felixoi.felograms.api.data.HologramData;
+import net.felixoi.felograms.api.data.ImmutableHologramData;
 import net.felixoi.felograms.api.exception.WorldNotFoundException;
 import net.felixoi.felograms.api.hologram.Hologram;
-import net.felixoi.felograms.data.HologramData;
-import net.felixoi.felograms.data.ImmutableHologramData;
 import net.felixoi.felograms.util.LocationUtil;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -195,7 +195,7 @@ public final class SimpleHologram implements Hologram {
             }
         } else {
             Felograms.getInstance().getLogger().error("Failed to retrieve the DataManipulatorBuilder for HologramData." +
-                    "\nAbandoned to spawnAssociatedEntities entities for hologram " + this.uuid + "!");
+                    "\nAbandoned to spawn associated entities for hologram " + this.uuid + "!");
         }
     }
 

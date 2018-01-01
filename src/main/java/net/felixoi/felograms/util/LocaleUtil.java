@@ -1,6 +1,9 @@
 package net.felixoi.felograms.util;
 
+import net.felixoi.felograms.Felograms;
+
 import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -19,13 +22,16 @@ public final class LocaleUtil {
                 locale = Locale.GERMAN;
                 break;
             case "en":
+                locale = Locale.ENGLISH;
+                break;
             default:
                 locale = Locale.ENGLISH;
+                Felograms.getInstance().getLogger().warn("Language '" + language + "' is unsupported! Falling back to english.");
         }
 
         Locale.setDefault(locale);
-
-        bundle = ResourceBundle.getBundle("assets.felograms.messages");
+        
+        bundle = PropertyResourceBundle.getBundle("assets.felograms.messages", new UTF8Control());
     }
 
     public static String getMessage(String key) {
@@ -37,7 +43,7 @@ public final class LocaleUtil {
     public static String getMessage(String key, Object... args) {
         checkNotNull(key, "The variable 'key' in LocaleUtil#getMessage(key) cannot be null.");
 
-        return String.format(bundle.getString(key), args);
+        return String.format(getMessage(key), args);
     }
 
 }

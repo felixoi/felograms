@@ -1,26 +1,29 @@
 package net.felixoi.felograms.data;
 
 import net.felixoi.felograms.api.data.FelogramKeys;
+import net.felixoi.felograms.api.data.HologramData;
+import net.felixoi.felograms.api.data.ImmutableHologramData;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.manipulator.mutable.common.AbstractBooleanData;
 import org.spongepowered.api.data.merge.MergeFunction;
+import org.spongepowered.api.data.value.mutable.Value;
 
 import java.util.Optional;
 
-public final class HologramData extends AbstractBooleanData<HologramData, ImmutableHologramData> {
+public final class FelogramsHologramData extends AbstractBooleanData<HologramData, ImmutableHologramData> implements HologramData {
 
-    HologramData(boolean value) {
+    FelogramsHologramData(boolean value) {
         super(value, FelogramKeys.IS_HOLOGRAM, false);
     }
 
-    HologramData() {
+    FelogramsHologramData() {
         this(false);
     }
 
     @Override
     public Optional<HologramData> fill(DataHolder dataHolder, MergeFunction overlap) {
-        HologramData merged = overlap.merge(this, dataHolder.get(HologramData.class).orElse(null));
+        FelogramsHologramData merged = overlap.merge(this, dataHolder.get(FelogramsHologramData.class).orElse(null));
         this.setValue(merged.getValue());
 
         return Optional.of(this);
@@ -37,18 +40,23 @@ public final class HologramData extends AbstractBooleanData<HologramData, Immuta
     }
 
     @Override
-    public HologramData copy() {
-        return new HologramData(this.getValue());
+    public FelogramsHologramData copy() {
+        return new FelogramsHologramData(this.getValue());
     }
 
     @Override
     public ImmutableHologramData asImmutable() {
-        return new ImmutableHologramData(this.getValue());
+        return new ImmutableFelogramsHologramData(this.getValue());
     }
 
     @Override
     public int getContentVersion() {
         return 0;
+    }
+
+    @Override
+    public Value<Boolean> isHologram() {
+        return this.getValueGetter();
     }
 
 }

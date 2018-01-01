@@ -4,7 +4,7 @@ import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
-public class MainConfiguration {
+public final class MainConfiguration {
 
     @Setting(comment = "Specifies the plugin language. Currently supported: de, en")
     private String locale = "en";
